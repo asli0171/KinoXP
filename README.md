@@ -20,6 +20,7 @@ Fem wireframes der dækker hele brugerrejsen. Kundesiden: hjemmeside med foresti
 
 <img width="1024" height="768" alt="KINOXPBOOKINGPAGE (7)" src="https://github.com/user-attachments/assets/f137ca33-31a3-4d05-be14-8203fc925be1" />
 
+
 KinoXP Product Backlog
 
 Sprint 1 — March 3–7
