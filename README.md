@@ -4,7 +4,7 @@ ER Diagram
 
 Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 entiteter — Cinema, Hall, Film, Screening, Seat, ReservationSeat, Reservation og Admin — med deres attributter og relationer. Dette viser den fulde dataarkitektur inklusive sædekategorier, reservationslogik og rollebaseret adgangsseparation mellem admin og kunde.
 
-<img width="1024" height="768" alt="KinoXPER (1)" src="https://github.com/user-attachments/assets/2bdf2360-2b69-4e5d-a80b-9019c36669de" />
+<img width="1024" height="768" alt="KinoXPER (2)" src="https://github.com/user-attachments/assets/87fea7b2-2a55-438a-9c65-c4a96dd26578" />
 
 Wireframes
 
