@@ -43,7 +43,7 @@ Sprint 2 — March 8–14
 | As an admin I want to delete a screening so I can remove cancelled shows | MVP | 1 | PENDING |
 | As an admin I want to see all reservations for a screening so I know how many seats are sold | MVP | 2 | PENDING |
 
-Nice To Have — Not scheduled
+Nice To Have
 
 | Story | Priority | Points | Status |
 | --- | --- | --- | --- |
