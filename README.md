@@ -1,4 +1,12 @@
-# KinoXP<img width="1024" height="768" alt="KinoXP (5)" src="https://github.com/user-attachments/assets/db01ca5b-dfb0-4398-8666-68cd616dc922" /> 
+# KinoXP
+
+ER Diagram
+Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 entiteter — Cinema, Hall, Film, Screening, Seat, ReservationSeat, Reservation og Admin — med deres attributter og relationer. Dette viser den fulde dataarkitektur inklusive sædekategorier, reservationslogik og rollebaseret adgangsseparation mellem admin og kunde.
+
+<img width="1024" height="768" alt="KinoXP (5)" src="https://github.com/user-attachments/assets/db01ca5b-dfb0-4398-8666-68cd616dc922" /> 
+
+Wireframes
+Fem wireframes der dækker hele brugerrejsen. Kundesiden: hjemmeside med forestillingsoversigt, sædevalgside med farvekodede cowboy- og sofapladser samt dynamisk prisberegning, og en bekræftelsesside efter booking. Adminsiden: sikker loginside, hoveddashboard med håndtering af forestillinger og reservationer.
 
 <img width="1024" height="768" alt="KINOXPHOMEPAGE (1)" src="https://github.com/user-attachments/assets/6f3d9ae8-b1af-4916-8511-70979c44240a" />
 
@@ -9,6 +17,7 @@
 <img width="1024" height="768" alt="KINOXPBOOKINGPAGE (5)" src="https://github.com/user-attachments/assets/a544f02c-64b7-4b81-8fa6-ec71b9cc75b3" />
 
 <img width="1024" height="768" alt="KINOXPBOOKINGPAGE (7)" src="https://github.com/user-attachments/assets/f137ca33-31a3-4d05-be14-8203fc925be1" />
+
 KinoXP Product Backlog
 
 Sprint 1 — March 3–7
