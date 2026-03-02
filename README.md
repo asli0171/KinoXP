@@ -1,11 +1,13 @@
 # KinoXP
 
 ER Diagram
+
 Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 entiteter — Cinema, Hall, Film, Screening, Seat, ReservationSeat, Reservation og Admin — med deres attributter og relationer. Dette viser den fulde dataarkitektur inklusive sædekategorier, reservationslogik og rollebaseret adgangsseparation mellem admin og kunde.
 
 <img width="1024" height="768" alt="KinoXP (5)" src="https://github.com/user-attachments/assets/db01ca5b-dfb0-4398-8666-68cd616dc922" /> 
 
 Wireframes
+
 Fem wireframes der dækker hele brugerrejsen. Kundesiden: hjemmeside med forestillingsoversigt, sædevalgside med farvekodede cowboy- og sofapladser samt dynamisk prisberegning, og en bekræftelsesside efter booking. Adminsiden: sikker loginside, hoveddashboard med håndtering af forestillinger og reservationer.
 
 <img width="1024" height="768" alt="KINOXPHOMEPAGE (1)" src="https://github.com/user-attachments/assets/6f3d9ae8-b1af-4916-8511-70979c44240a" />
