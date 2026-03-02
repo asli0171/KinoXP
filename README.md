@@ -6,6 +6,7 @@ Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 
 
 <img width="1024" height="768" alt="KinoXPER (2)" src="https://github.com/user-attachments/assets/87fea7b2-2a55-438a-9c65-c4a96dd26578" />
 
+
 Wireframes
 
 Fem wireframes der dækker hele brugerrejsen. Kundesiden: hjemmeside med forestillingsoversigt, sædevalgside med farvekodede cowboy- og sofapladser samt dynamisk prisberegning, og en bekræftelsesside efter booking. Adminsiden: sikker loginside, hoveddashboard med håndtering af forestillinger og reservationer.
