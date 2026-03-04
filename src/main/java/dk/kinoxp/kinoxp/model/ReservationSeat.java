@@ -1,4 +1,51 @@
 package dk.kinoxp.kinoxp.model;
+import jakarta.persistence.*;
 
-public class ReservationSeat {
+@Entity
+@Table(name = "RESERVATIONSEAT")
+public class Reservationseat {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    private Seat seat;
+
+    @ManyToOne
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
+
+    public Reservationseat() {}
+
+    public Reservationseat(Seat seat, Reservation reservation){
+        this.setSeat(seat);
+        this.setReservation(reservation);
+    }
+
+    public Long getId() {
+        return id;
+
+    }
+
+    public Seat getSeat (){
+        return seat;
+
+    }
+
+    public void setSeat (Seat seat){
+        this.seat = seat;
+    }
+
+
+    public Reservation getReservation (){
+        return reservation;
+
+    }
+
+    public void setReservation (Reservation reservation){
+        this.reservation = reservation;
+    }
 }
