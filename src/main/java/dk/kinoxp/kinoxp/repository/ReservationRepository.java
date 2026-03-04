@@ -1,4 +1,7 @@
 package dk.kinoxp.kinoxp.repository;
 
-public class ReservationRepository {
+import dk.kinoxp.kinoxp.model.Reservation;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 }

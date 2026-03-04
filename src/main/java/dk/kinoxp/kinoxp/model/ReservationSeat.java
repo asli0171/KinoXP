@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "RESERVATIONSEAT")
-public class Reservationseat {
+public class ReservationSeat {
 
 
     @Id
@@ -18,9 +18,9 @@ public class Reservationseat {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
-    public Reservationseat() {}
+    public ReservationSeat() {}
 
-    public Reservationseat(Seat seat, Reservation reservation){
+    public ReservationSeat(Seat seat, Reservation reservation){
         this.setSeat(seat);
         this.setReservation(reservation);
     }

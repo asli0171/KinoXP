@@ -20,16 +20,16 @@ public class Hall {
     }
 
     public Long getId() {
-        return id;{
+        return id;
 
     }
 
-    public int getHallnumber (){
+    public int getHallnumber() {
         return hallnumber;
 
     }
 
-    public void setHallnumber (int hallnumber){
+    public void setHallnumber(int hallnumber){
         this.hallnumber = hallnumber;
     }
 }
