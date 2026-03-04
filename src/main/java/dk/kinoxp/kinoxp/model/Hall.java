@@ -19,6 +19,11 @@ public class Hall {
         this.setHallnumber(hallnumber);
     }
 
+    public Long getId() {
+        return id;{
+
+    }
+
     public int getHallnumber (){
         return hallnumber;
 
