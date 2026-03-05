@@ -15,14 +15,19 @@ public class ReservationSeat {
     private Seat seat;
 
     @ManyToOne
+    @JoinColumn(name = "screening_id")
+    private Screening screening;
+
+    @ManyToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
     public ReservationSeat() {}
 
-    public ReservationSeat(Seat seat, Reservation reservation){
+    public ReservationSeat(Seat seat, Reservation reservation, Screening screening){
         this.setSeat(seat);
         this.setReservation(reservation);
+        this.setScreening(screening);
     }
 
     public Long getId() {
@@ -37,6 +42,14 @@ public class ReservationSeat {
 
     public void setSeat (Seat seat){
         this.seat = seat;
+    }
+
+    public Screening getScreening(){
+        return screening;
+    }
+
+    public void setScreening (Screening screening){
+        this.screening = screening;
     }
 
 
