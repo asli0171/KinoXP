@@ -14,7 +14,7 @@ public class ScreeningService {
         this.screeningRepository = screeningRepository;
     }
 
-    public Screening savescreening (Screening screening) {
+    public Screening saveScreening (Screening screening) {
         return screeningRepository.save(screening);
     }
 
@@ -22,7 +22,7 @@ public class ScreeningService {
         return screeningRepository.findAll();
     }
 
-    public Optional<Screening> getHallById (Long id){
+    public Optional<Screening> getScreeningById (Long id){
         return screeningRepository.findById(id);
     }
 

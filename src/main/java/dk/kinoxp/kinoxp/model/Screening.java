@@ -12,6 +12,7 @@ public class Screening {
     private Long id;
     private int basePrice;
     private LocalDateTime dateTime;
+    private boolean is3D;
 
     @ManyToOne
     @JoinColumn(name = "film_id")
@@ -22,11 +23,12 @@ public class Screening {
     private Hall hall;
     public Screening() {}
 
-    public Screening(int basePrice, Film film, Hall hall, LocalDateTime dateTime){
+    public Screening(int basePrice, Film film, Hall hall, LocalDateTime dateTime, boolean is3D){
         this.setBasePrice(basePrice);
         this.setFilm(film);
         this.setHall(hall);
         this.setDateTime(dateTime);
+        this.setIs3D(is3D);
     }
 
     public Long getId() {
@@ -70,4 +72,13 @@ public class Screening {
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
+
+    public boolean isIs3D() {
+        return is3D;
+    }
+
+    public void setIs3D(boolean is3D) {
+        this.is3D = is3D;
+    }
+
 }
