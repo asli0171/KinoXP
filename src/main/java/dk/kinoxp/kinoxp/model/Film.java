@@ -66,5 +66,9 @@ public class Film {
     public void setLength (int length){
         this.length = length;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
 

@@ -39,4 +39,15 @@ public class ScreeningController {
         screeningService.deleteScreeningById(id);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Screening> updateScreening(@PathVariable Long id, @RequestBody Screening screening) {
+        return screeningService.getScreeningById(id)
+                .map(existing -> {
+                    screening.setId(id);
+                    return ResponseEntity.ok(screeningService.saveScreening(screening));
+                })
+                .orElse(ResponseEntity.notFound().build());
+
+    }
+
 }

@@ -60,7 +60,7 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
-    public Optional<Reservation> getReservationById (Long id){
+    public Optional<Reservation> getreservationById (Long id){
         return reservationRepository.findById(id);
     }
 

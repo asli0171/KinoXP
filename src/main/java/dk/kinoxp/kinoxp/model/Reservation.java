@@ -62,4 +62,8 @@ public class Reservation {
     public void setTotalPrice (double totalPrice){
         this.totalPrice = totalPrice;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
