@@ -14,7 +14,7 @@ public class FilmService {
         this.filmRepository = filmRepository;
     }
 
-    public Film savefilm (Film film) {
+    public Film saveFilm (Film film) {
         return filmRepository.save(film);
     }
 

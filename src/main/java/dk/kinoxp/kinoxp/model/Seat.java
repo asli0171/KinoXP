@@ -14,6 +14,10 @@ public class Seat {
 
     private int seatNumber;
 
+    @ManyToOne
+    @JoinColumn(name = "hall_id")
+    private Hall hall;
+
     public Seat() {}
 
     public Seat(String seatType, int seatNumber) {
@@ -40,4 +44,15 @@ public class Seat {
     public void setSeatNumber (int seatNumber){
         this.seatNumber = seatNumber;
     }
+
+
+    public Hall getHall (){
+        return hall;
+
+    }
+
+    public void setHall (Hall hall){
+        this.hall = hall;
+    }
+
 }

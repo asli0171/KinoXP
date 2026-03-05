@@ -81,4 +81,8 @@ public class Screening {
         this.is3D = is3D;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
