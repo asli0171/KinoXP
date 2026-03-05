@@ -14,11 +14,11 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation savereservation (Reservation reservation) {
+    public Reservation saveReservation (Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 
-    public List<Reservation> getAllReservationss (){
+    public List<Reservation> getAllReservations (){
         return reservationRepository.findAll();
     }
 
