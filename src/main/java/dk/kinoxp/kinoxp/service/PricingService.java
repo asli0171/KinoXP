@@ -45,7 +45,7 @@ public class PricingService {
 
         for (Seat seat : seats) {
             if (seat.getSeatType().equals("cowboy")) {
-                price -= cowboySurcharge;
+                price -= price * cowboySurcharge;
             } else if (seat.getSeatType().equals("sofa")) {
                 price += sofaSurcharge;}
         }
