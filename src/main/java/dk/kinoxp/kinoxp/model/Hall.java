@@ -6,30 +6,30 @@ import jakarta.persistence.*;
 @Table(name = "HALL")
 public class Hall {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int hallnumber;
+    @Column(name = "hallnumber")
+    private Integer hallNumber;
 
     public Hall() {}
 
-    public Hall(int hallnumber){
-        this.setHallnumber(hallnumber);
+    public Hall(Integer hallNumber) {
+        this.setHallNumber(hallNumber);
     }
 
     public Long getId() {
         return id;
-
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public int getHallnumber() {
-        return hallnumber;
-
+    public Integer getHallNumber() {
+        return hallNumber;
     }
-
-    public void setHallnumber(int hallnumber){
-        this.hallnumber = hallnumber;
+    public void setHallNumber(Integer hallNumber) {
+        this.hallNumber = hallNumber;
     }
 }

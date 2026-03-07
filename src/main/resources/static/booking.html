@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP – Book</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: white; }
+
+        header {
+            background: #6B3A2A;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        main { padding: 2rem; display: flex; gap: 2rem; align-items: flex-start; }
+
+        .seat-area { flex: 1; }
+
+        .screen {
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 0.4rem;
+            margin-bottom: 1.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .section { margin-bottom: 1.5rem; }
+        .section-title {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .seat-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        .row-label { font-size: 0.7rem; color: #aaa; width: 1rem; text-align: center; }
+
+        .seat {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #C4845A;
+            border: 2px solid #6B3A2A;
+            cursor: pointer;
+            font-size: 0.6rem;
+            color: #f5e6d3;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .seat:hover:not(.taken) { background: #a06040; }
+        .seat.taken { background: #d9c4b8; border-color: #b09080; color: #b09080; cursor: not-allowed; }
+        .seat.selected { background: #6B3A2A; color: #f5e6d3; }
+        .seat.sofa { width: 120px; height: 50px; border-radius: 50px; font-size: 0.7rem; }
+
+        .sidebar {
+            width: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-field {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            padding: 0.6rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .sidebar-btn {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.6rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+        .sidebar-btn:hover { background: #4e2a1e; }
+        .sidebar-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .sidebar-btn.book { font-weight: bold; }
+
+        #input-name, #input-email {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.6rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+        #input-name::placeholder, #input-email::placeholder { color: #c4a090; }
+
+        .confirmation {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .confirmation.show { display: flex; }
+
+        .confirmation-box {
+            background: white;
+            border: 3px solid #6B3A2A;
+            border-radius: 6px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .confirmation-box h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #6B3A2A;
+            margin-bottom: 1rem;
+        }
+        .confirmation-box p {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        .confirmation-box .total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #6B3A2A;
+            margin: 1rem 0;
+        }
+        .confirmation-box button {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .confirmation-box button:hover { background: #4e2a1e; }
+
+        .loading { color: #888; font-size: 0.85rem; padding: 1rem 0; }
+        .error { color: red; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP</h1>
+</header>
+
+<main>
+    <div class="seat-area">
+        <div class="screen">Screen</div>
+        <div id="seat-container"><p class="loading">Henter sæder...</p></div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-field" id="info-hall">Sal: –</div>
+        <div class="sidebar-field" id="info-ticket">Billetter: 0</div>
+        <button class="sidebar-btn" onclick="addTicket()">Add Ticket</button>
+        <button class="sidebar-btn" onclick="removeTicket()">Remove Ticket</button>
+        <div class="sidebar-field" id="info-price">Pris: 0 kr</div>
+        <input id="input-name" type="text" placeholder="Navn">
+        <input id="input-email" type="email" placeholder="E-mail">
+        <button class="sidebar-btn book" id="btn-book" onclick="submitBooking()">Book</button>
+    </div>
+</main>
+
+<div class="confirmation" id="confirmation">
+    <div class="confirmation-box">
+        <h2>Booking Bekræftet!</h2>
+        <p id="conf-name"></p>
+        <p id="conf-email"></p>
+        <p id="conf-film"></p>
+        <p id="conf-time"></p>
+        <p id="conf-hall"></p>
+        <p id="conf-seats"></p>
+        <div class="total" id="conf-price"></div>
+        <button onclick="window.location.href='/'">Tilbage til forsiden</button>
+    </div>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const screeningId = params.get('screeningId');
+    let allSeats = [];
+    let selectedSeats = [];
+    let basePrice = 0;
+    let screeningData = null;
+
+    if (!screeningId) {
+        document.getElementById('seat-container').innerHTML = '<p class="error">Ingen forestilling valgt.</p>';
+    } else {
+        loadScreeningInfo();
+        loadSeats();
+    }
+
+    function loadScreeningInfo() {
+        fetch('/api/screenings')
+            .then(r => r.json())
+            .then(data => {
+                screeningData = data.find(x => x.id == screeningId);
+                if (!screeningData) return;
+                basePrice = screeningData.basePrice || 0;
+                const hall = screeningData.hall || {};
+                document.getElementById('info-hall').textContent = 'Sal: ' + (hall.hallNumber || '?');
+                updateSidebar();
+            });
+    }
+
+    function loadSeats() {
+        fetch('/api/seats/screening/' + screeningId)
+            .then(r => r.json())
+            .then(data => {
+                allSeats = data;
+                renderSeats(data);
+            })
+            .catch(function() {
+                document.getElementById('seat-container').innerHTML = '<p class="error">Kunne ikke hente sæder.</p>';
+            });
+    }
+
+    function renderSeats(seats) {
+        var SEATS_PER_ROW = 8;
+        var typeOrder = ['cowboy', 'standard', 'sofa'];
+        var typeLabels = { cowboy: 'Cowboy', standard: 'Standard', sofa: 'Sofa' };
+        var grouped = { cowboy: [], standard: [], sofa: [] };
+
+        seats.forEach(function(item) {
+            var type = (item.seat.seatType || 'standard').toLowerCase();
+            if (grouped[type] !== undefined) grouped[type].push(item);
+            else grouped['standard'].push(item);
+        });
+
+        var container = document.getElementById('seat-container');
+        container.innerHTML = '';
+        var rowIndex = 0;
+
+        typeOrder.forEach(function(type) {
+            var group = grouped[type];
+            if (group.length === 0) return;
+
+            var section = document.createElement('div');
+            section.className = 'section';
+
+            var title = document.createElement('div');
+            title.className = 'section-title';
+            title.textContent = typeLabels[type];
+            section.appendChild(title);
+
+            var perRow = (type === 'sofa') ? 2 : SEATS_PER_ROW;
+
+            for (var i = 0; i < group.length; i += perRow) {
+                var rowItems = group.slice(i, i + perRow);
+                var row = document.createElement('div');
+                row.className = 'seat-row';
+
+                var label = document.createElement('div');
+                label.className = 'row-label';
+                label.textContent = String.fromCharCode(65 + rowIndex);
+                row.appendChild(label);
+
+                rowItems.forEach(function(item) {
+                    var seat = item.seat;
+                    var available = (item.available !== undefined) ? item.available : item.isAvailable;
+                    var seatType = (seat.seatType || 'standard').toLowerCase();
+
+                    var el = document.createElement('button');
+                    el.className = 'seat ' + seatType + (available ? '' : ' taken');
+                    el.textContent = 'Seat';
+                    el.setAttribute('data-id', seat.id);
+                    el.setAttribute('data-number', seat.seatNumber);
+
+                    if (available) {
+                        el.addEventListener('click', (function(e, s) {
+                            return function() { toggleSeat(e, s); };
+                        })(el, seat));
+                    }
+
+                    row.appendChild(el);
+                });
+
+                section.appendChild(row);
+                rowIndex++;
+            }
+
+            container.appendChild(section);
+        });
+    }
+
+    function toggleSeat(el, seat) {
+        var id = String(seat.id);
+        if (el.classList.contains('selected')) {
+            el.classList.remove('selected');
+            selectedSeats = selectedSeats.filter(function(s) { return String(s.id) !== id; });
+        } else {
+            el.classList.add('selected');
+            selectedSeats.push(seat);
+        }
+        updateSidebar();
+    }
+
+    function addTicket() {
+        for (var i = 0; i < allSeats.length; i++) {
+            var item = allSeats[i];
+            var avail = (item.available !== undefined) ? item.available : item.isAvailable;
+            var already = selectedSeats.find(function(s) { return s.id === item.seat.id; });
+            if (avail && !already) {
+                var el = document.querySelector('[data-id="' + item.seat.id + '"]');
+                if (el) toggleSeat(el, item.seat);
+                break;
+            }
+        }
+    }
+
+    function removeTicket() {
+        if (selectedSeats.length === 0) return;
+        var last = selectedSeats[selectedSeats.length - 1];
+        var el = document.querySelector('[data-id="' + last.id + '"]');
+        if (el) toggleSeat(el, last);
+    }
+
+    function updateSidebar() {
+        document.getElementById('info-ticket').textContent = 'Billetter: ' + selectedSeats.length;
+        document.getElementById('info-price').textContent = 'Pris: ' + (selectedSeats.length * basePrice) + ' kr';
+    }
+
+    function submitBooking() {
+        if (selectedSeats.length === 0) return alert('Vælg mindst ét sæde.');
+        var name = document.getElementById('input-name').value.trim();
+        var email = document.getElementById('input-email').value.trim();
+        if (!name) return alert('Indtast dit navn.');
+        if (!email) return alert('Indtast din e-mail.');
+
+        var seatIds = selectedSeats.map(function(s) { return s.id; });
+        var btn = document.getElementById('btn-book');
+        btn.disabled = true;
+        btn.textContent = 'Behandler...';
+
+        fetch('/api/reservations/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                customerName: name,
+                customerEmail: email,
+                screeningId: parseInt(screeningId),
+                seatId: seatIds
+            })
+        })
+            .then(function(r) {
+                if (!r.ok) throw new Error('Booking fejlede');
+                return r.json();
+            })
+            .then(function(reservation) {
+                showConfirmation(reservation, name, email);
+            })
+            .catch(function(err) {
+                alert('Booking fejlede: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Book';
+            });
+    }
+
+    function showConfirmation(reservation, name, email) {
+        var film = screeningData && screeningData.film ? screeningData.film.title : '–';
+        var hall = screeningData && screeningData.hall ? screeningData.hall.hallNumber : '–';
+        var dt = screeningData ? new Date(screeningData.dateTime) : null;
+        var timeStr = dt ? dt.toLocaleDateString('da-DK', {weekday:'short', day:'numeric', month:'short'}) + ' ' + dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'}) : '–';
+
+        document.getElementById('conf-name').textContent = 'Navn: ' + name;
+        document.getElementById('conf-email').textContent = 'E-mail: ' + email;
+        document.getElementById('conf-film').textContent = 'Film: ' + film;
+        document.getElementById('conf-time').textContent = 'Tidspunkt: ' + timeStr;
+        document.getElementById('conf-hall').textContent = 'Sal: ' + hall;
+        document.getElementById('conf-seats').textContent = 'Antal billetter: ' + selectedSeats.length;
+        document.getElementById('conf-price').textContent = 'Total: ' + (selectedSeats.length * basePrice) + ' kr';
+
+        document.getElementById('confirmation').classList.add('show');
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP – Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f0ec; }
+
+        header {
+            background: #6B3A2A;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .header-right { display: flex; gap: 1rem; align-items: center; }
+        .logout-btn {
+            background: #4e2a1e;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .logout-btn:hover { background: #3a1a0e; }
+        .home-btn {
+            background: none;
+            color: #f5e6d3;
+            border: 1px solid #f5e6d3;
+            padding: 0.4rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            background: #4e2a1e;
+            padding: 0 2rem;
+        }
+        .tab {
+            background: none;
+            border: none;
+            color: #c4a090;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-bottom: 3px solid transparent;
+        }
+        .tab:hover { color: #f5e6d3; }
+        .tab.active { color: #f5e6d3; border-bottom-color: #f5e6d3; }
+
+        main { padding: 2rem; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: #6B3A2A;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            font-size: 0.85rem;
+        }
+        th {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            font-weight: normal;
+            letter-spacing: 0.05em;
+        }
+        td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #e8ddd8;
+            color: #333;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #faf5f2; }
+
+        .delete-btn {
+            background: #8B2020;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .delete-btn:hover { background: #6a1818; }
+
+        .add-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .form-group label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .form-group input, .form-group select {
+            background: #f5f0ec;
+            border: 1px solid #d4c4b8;
+            padding: 0.5rem 0.7rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #6B3A2A;
+        }
+
+        .add-btn {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            height: fit-content;
+        }
+        .add-btn:hover { background: #4e2a1e; }
+
+        .msg { font-size: 0.8rem; color: #6B3A2A; padding: 0.5rem 0; }
+        .error { font-size: 0.8rem; color: red; padding: 0.5rem 0; }
+        .loading { color: #888; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP Admin</h1>
+    <div class="header-right">
+        <a href="/" class="home-btn">← Forside</a>
+        <button class="logout-btn" onclick="logout()">Log ud</button>
+    </div>
+</header>
+
+<div class="tabs">
+    <button class="tab active" onclick="showTab('reservations')">Reservationer</button>
+    <button class="tab" onclick="showTab('films')">Film</button>
+    <button class="tab" onclick="showTab('screenings')">Forestillinger</button>
+</div>
+
+<main>
+
+    <div class="section active" id="section-reservations">
+        <div class="section-header">
+            <h2>Alle Reservationer</h2>
+            <button class="add-btn" onclick="loadReservations()">↻ Opdater</button>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Navn</th>
+                <th>Email</th>
+                <th>Billetter</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="reservations-body">
+            <tr><td colspan="6" class="loading">Henter...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" id="section-films">
+        <div class="section-header">
+            <h2>Film</h2>
+        </div>
+
+        <div class="add-form">
+            <div class="form-group">
+                <label>Titel</label>
+                <input id="film-title" type="text" placeholder="Titel">
+            </div>
+            <div class="form-group">
+                <label>Sprog</label>
+                <input id="film-lang" type="text" placeholder="English">
+            </div>
+            <div class="form-group">
+                <label>Aldersgrænse</label>
+                <input id="film-age" type="text" placeholder="PG13">
+            </div>
+            <div class="form-group">
+                <label>Længde (min)</label>
+                <input id="film-length" type="number" placeholder="120">
+            </div>
+            <button class="add-btn" onclick="addFilm()">+ Tilføj Film</button>
+        </div>
+        <div id="film-msg"></div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titel</th>
+                <th>Sprog</th>
+                <th>Aldersgrænse</th>
+                <th>Længde</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="films-body">
+            <tr><td colspan="6" class="loading">Henter...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" id="section-screenings">
+        <div class="section-header">
+            <h2>Forestillinger</h2>
+        </div>
+
+        <div class="add-form">
+            <div class="form-group">
+                <label>Film</label>
+                <select id="screening-film">
+                    <option value="">Vælg film</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sal</label>
+                <select id="screening-hall">
+                    <option value="1">Sal 1</option>
+                    <option value="2">Sal 2</option>
+                    <option value="3">Sal 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Dato & Tid</label>
+                <input id="screening-datetime" type="datetime-local">
+            </div>
+            <div class="form-group">
+                <label>Basispris</label>
+                <input id="screening-price" type="number" placeholder="100">
+            </div>
+            <div class="form-group">
+                <label>3D</label>
+                <select id="screening-3d">
+                    <option value="false">Nej</option>
+                    <option value="true">Ja</option>
+                </select>
+            </div>
+            <button class="add-btn" onclick="addScreening()">+ Tilføj</button>
+        </div>
+        <div id="screening-msg"></div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Film</th>
+                <th>Sal</th>
+                <th>Dato & Tid</th>
+                <th>Pris</th>
+                <th>3D</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="screenings-body">
+            <tr><td colspan="7" class="loading">Henter...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<script>
+    var credentials = btoa('admin:admin123');
+    var authHeader = 'Basic ' + credentials;
+
+    function authFetch(url, options) {
+        options = options || {};
+        options.headers = options.headers || {};
+        options.headers['Authorization'] = authHeader;
+        options.headers['Content-Type'] = 'application/json';
+        return fetch(url, options);
+    }
+
+    function showTab(name) {
+        document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        document.getElementById('section-' + name).classList.add('active');
+        event.target.classList.add('active');
+
+        if (name === 'reservations') loadReservations();
+        if (name === 'films') loadFilms();
+        if (name === 'screenings') { loadScreenings(); loadFilmsForSelect(); }
+    }
+
+    function logout() {
+        fetch('/api/admin', { headers: { 'Authorization': 'Basic ' + btoa('logout:logout') } })
+            .finally(function() { window.location.href = '/'; });
+    }
+
+    function loadReservations() {
+        authFetch('/api/reservations')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var body = document.getElementById('reservations-body');
+                if (data.length === 0) {
+                    body.innerHTML = '<tr><td colspan="6">Ingen reservationer.</td></tr>';
+                    return;
+                }
+                body.innerHTML = '';
+                data.forEach(function(r) {
+                    var tr = document.createElement('tr');
+                    tr.innerHTML =
+                        '<td>' + r.id + '</td>' +
+                        '<td>' + (r.customerName || '–') + '</td>' +
+                        '<td>' + (r.customerEmail || '–') + '</td>' +
+                        '<td>' + r.numberOfTickets + '</td>' +
+                        '<td>' + r.totalPrice + ' kr</td>' +
+                        '<td><button class="delete-btn" onclick="deleteReservation(' + r.id + ')">Slet</button></td>';
+                    body.appendChild(tr);
+                });
+            });
+    }
+
+    function deleteReservation(id) {
+        if (!confirm('Slet reservation ' + id + '?')) return;
+        authFetch('/api/reservations/' + id, { method: 'DELETE' })
+            .then(function() { loadReservations(); });
+    }
+
+    function loadFilms() {
+        fetch('/api/films')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var body = document.getElementById('films-body');
+                body.innerHTML = '';
+                data.forEach(function(f) {
+                    var tr = document.createElement('tr');
+                    tr.innerHTML =
+                        '<td>' + f.id + '</td>' +
+                        '<td>' + f.title + '</td>' +
+                        '<td>' + (f.language || '–') + '</td>' +
+                        '<td>' + (f.ageRating || '–') + '</td>' +
+                        '<td>' + (f.length || '–') + ' min</td>' +
+                        '<td><button class="delete-btn" onclick="deleteFilm(' + f.id + ')">Slet</button></td>';
+                    body.appendChild(tr);
+                });
+            });
+    }
+
+    function addFilm() {
+        var title = document.getElementById('film-title').value.trim();
+        var lang = document.getElementById('film-lang').value.trim();
+        var age = document.getElementById('film-age').value.trim();
+        var length = document.getElementById('film-length').value;
+        var msg = document.getElementById('film-msg');
+
+        if (!title) { msg.innerHTML = '<p class="error">Titel er påkrævet.</p>'; return; }
+
+        authFetch('/api/films', {
+            method: 'POST',
+            body: JSON.stringify({ title: title, language: lang, ageRating: age, length: parseInt(length) })
+        })
+            .then(function(r) { return r.json(); })
+            .then(function() {
+                msg.innerHTML = '<p class="msg">Film tilføjet!</p>';
+                document.getElementById('film-title').value = '';
+                document.getElementById('film-lang').value = '';
+                document.getElementById('film-age').value = '';
+                document.getElementById('film-length').value = '';
+                loadFilms();
+            })
+            .catch(function() { msg.innerHTML = '<p class="error">Kunne ikke tilføje film.</p>'; });
+    }
+
+    function deleteFilm(id) {
+        if (!confirm('Slet film ' + id + '?')) return;
+        authFetch('/api/films/' + id, { method: 'DELETE' })
+            .then(function() { loadFilms(); });
+    }
+
+    function loadFilmsForSelect() {
+        fetch('/api/films')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var select = document.getElementById('screening-film');
+                select.innerHTML = '<option value="">Vælg film</option>';
+                data.forEach(function(f) {
+                    var opt = document.createElement('option');
+                    opt.value = f.id;
+                    opt.textContent = f.title;
+                    select.appendChild(opt);
+                });
+            });
+    }
+
+    function loadScreenings() {
+        fetch('/api/screenings')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var body = document.getElementById('screenings-body');
+                body.innerHTML = '';
+                data.forEach(function(s) {
+                    var film = s.film ? s.film.title : '–';
+                    var hall = s.hall ? s.hall.hallNumber : '–';
+                    var dt = new Date(s.dateTime);
+                    var dtStr = dt.toLocaleDateString('da-DK') + ' ' + dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'});
+                    var tr = document.createElement('tr');
+                    tr.innerHTML =
+                        '<td>' + s.id + '</td>' +
+                        '<td>' + film + '</td>' +
+                        '<td>Sal ' + hall + '</td>' +
+                        '<td>' + dtStr + '</td>' +
+                        '<td>' + s.basePrice + ' kr</td>' +
+                        '<td>' + (s.is3D ? 'Ja' : 'Nej') + '</td>' +
+                        '<td><button class="delete-btn" onclick="deleteScreening(' + s.id + ')">Slet</button></td>';
+                    body.appendChild(tr);
+                });
+            });
+    }
+
+    function addScreening() {
+        var filmId = document.getElementById('screening-film').value;
+        var hallId = document.getElementById('screening-hall').value;
+        var dt = document.getElementById('screening-datetime').value;
+        var price = document.getElementById('screening-price').value;
+        var is3d = document.getElementById('screening-3d').value === 'true';
+        var msg = document.getElementById('screening-msg');
+
+        if (!filmId || !dt || !price) { msg.innerHTML = '<p class="error">Udfyld alle felter.</p>'; return; }
+
+        authFetch('/api/screenings', {
+            method: 'POST',
+            body: JSON.stringify({
+                film: { id: parseInt(filmId) },
+                hall: { id: parseInt(hallId) },
+                dateTime: dt,
+                basePrice: parseInt(price),
+                is3D: is3d
+            })
+        })
+            .then(function(r) { return r.json(); })
+            .then(function() {
+                msg.innerHTML = '<p class="msg">Forestilling tilføjet!</p>';
+                document.getElementById('screening-datetime').value = '';
+                document.getElementById('screening-price').value = '';
+                loadScreenings();
+            })
+            .catch(function() { msg.innerHTML = '<p class="error">Kunne ikke tilføje forestilling.</p>'; });
+    }
+
+    function deleteScreening(id) {
+        if (!confirm('Slet forestilling ' + id + '?')) return;
+        authFetch('/api/screenings/' + id, { method: 'DELETE' })
+            .then(function() { loadScreenings(); });
+    }
+
+    loadReservations();
+</script>
+</body>
+</html>

@@ -20,19 +20,23 @@ public class KinoXpApplication {
     public static void main(String[] args) {
         SpringApplication.run(KinoXpApplication.class, args);
     }
+
     @Bean
     public CommandLineRunner testPricing(PricingService pricingService) {
         return args -> {
-            Film testFilm = new Film("Test Film", "Danish", "PG", 180);
-            Hall testHall = new Hall(1);
-            Screening testScreening = new Screening(100, testFilm, testHall, LocalDateTime.now(), true);
-            List<Seat> seats = new ArrayList<>();
-            seats.add(new Seat("cowboy", 1));
+            try {
+                Film testFilm = new Film("Test Film", "Danish", "PG", 180);
+                Hall testHall = new Hall(1);
+                Screening testScreening = new Screening(100, testFilm, testHall, LocalDateTime.now(), true);
+                List<Seat> seats = new ArrayList<>();
+                seats.add(new Seat("cowboy", 1));
 
-            double result = pricingService.calculatePrice(testScreening, 3, seats);
-            System.out.println("Calculated price: " + result + " DKK");
-
+                double result = pricingService.calculatePrice(testScreening, 3, seats);
+                System.out.println("Calculated price: " + result + " DKK");
+            } catch (Exception e) {
+                System.out.println("PricingService error: " + e.getMessage());
+            }
         };
-
     }
+
 }

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: white; }
+
+        header {
+            background: #6B3A2A;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        main { padding: 2rem; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .card { display: flex; flex-direction: column; gap: 0.4rem; }
+
+        .poster {
+            background: #6B3A2A;
+            height: 200px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #f5e6d3;
+        }
+
+        .card-field {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            padding: 0.4rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .times {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .time-btn {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.4rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+        }
+        .time-btn:hover { background: #4e2a1e; }
+
+        .book-btn {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .book-btn:hover { background: #4e2a1e; }
+
+        .loading { padding: 2rem; color: #888; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP</h1>
+</header>
+
+<main>
+    <div class="grid" id="screenings">
+        <p class="loading">Henter forestillinger...</p>
+    </div>
+</main>
+
+<script>
+    fetch('/api/screenings')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var grid = document.getElementById('screenings');
+            grid.innerHTML = '';
+
+            var films = {};
+            data.forEach(function(s) {
+                var title = s.film ? s.film.title : 'Ukendt';
+                if (!films[title]) films[title] = [];
+                films[title].push(s);
+            });
+
+            Object.keys(films).forEach(function(title) {
+                var screenings = films[title];
+                var card = document.createElement('div');
+                card.className = 'card';
+
+                var poster = document.createElement('div');
+                poster.className = 'poster';
+                poster.textContent = 'Poster';
+                card.appendChild(poster);
+
+                var titleEl = document.createElement('div');
+                titleEl.className = 'card-field';
+                titleEl.textContent = title;
+                card.appendChild(titleEl);
+
+                var times = document.createElement('div');
+                times.className = 'times';
+
+                var selectedScreeningId = screenings[0].id;
+
+                screenings.forEach(function(s) {
+                    var dt = new Date(s.dateTime);
+                    var date = dt.toLocaleDateString('da-DK', {day:'numeric', month:'short'});
+                    var time = dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'});
+
+                    var btn = document.createElement('button');
+                    btn.className = 'time-btn';
+                    btn.textContent = date + ' – ' + time;
+                    btn.setAttribute('data-id', s.id);
+
+                    btn.addEventListener('click', function() {
+                        times.querySelectorAll('.time-btn').forEach(function(b) {
+                            b.style.background = '#6B3A2A';
+                        });
+                        btn.style.background = '#3a1a0e';
+                        selectedScreeningId = s.id;
+                        bookBtn.setAttribute('data-screening', s.id);
+                    });
+
+                    times.appendChild(btn);
+                });
+
+                card.appendChild(times);
+
+                var bookBtn = document.createElement('button');
+                bookBtn.className = 'book-btn';
+                bookBtn.textContent = 'Book';
+                bookBtn.setAttribute('data-screening', selectedScreeningId);
+                bookBtn.addEventListener('click', function() {
+                    var id = bookBtn.getAttribute('data-screening');
+                    window.location.href = '/booking.html?screeningId=' + id;
+                });
+                card.appendChild(bookBtn);
+
+                grid.appendChild(card);
+            });
+        })
+        .catch(function() {
+            document.getElementById('screenings').innerHTML = '<p>Kunne ikke hente forestillinger.</p>';
+        });
+</script>
+</body>
+</html>
