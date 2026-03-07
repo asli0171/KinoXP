@@ -20,9 +20,10 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation createReservation(@RequestBody Reservation reservation) {
-        return reservationService.saveReservation(reservation);
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+        return ResponseEntity.status(201).body(reservationService.saveReservation(reservation));
     }
+
 
     @GetMapping
     public List<Reservation> getAllReservations() {
@@ -30,8 +31,8 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getreservationById(@PathVariable Long id) {
-        return reservationService.getreservationById(id)
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+        return reservationService.getReservationById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -41,5 +42,10 @@ public class ReservationController {
         return reservationService.createReservation(request.getScreeningId(), request.getSeatId(), request.getCustomerName(), request.getCustomerEmail());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservationById(@PathVariable Long id) {
+        reservationService.deleteReservationById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
