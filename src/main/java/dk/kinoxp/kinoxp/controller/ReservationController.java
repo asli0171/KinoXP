@@ -1,5 +1,6 @@
 package dk.kinoxp.kinoxp.controller;
 
+import dk.kinoxp.kinoxp.dto.ReservationRequestDTO;
 import dk.kinoxp.kinoxp.model.Reservation;
 import dk.kinoxp.kinoxp.service.ReservationService;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,11 @@ public class ReservationController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/book")
+    public Reservation createReservation(@RequestBody ReservationRequestDTO request) {
+        return reservationService.createReservation(request.getScreeningId(), request.getSeatId(), request.getCustomerName(), request.getCustomerEmail());
+    }
+
 
 }
