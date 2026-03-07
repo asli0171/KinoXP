@@ -40,7 +40,7 @@ public class PricingService {
         if (screening.getFilm().getLength() > longFilmThreshold) {
             price += longFilmSurcharge;}
 
-        if (screening.isIs3D()) {
+        if (screening.is3D()) {
             price += surcharge3D;}
 
         for (Seat seat : seats) {

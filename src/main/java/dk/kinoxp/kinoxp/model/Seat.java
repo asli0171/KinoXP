@@ -12,7 +12,7 @@ public class Seat {
 
     private String seatType;
 
-    private int seatNumber;
+    private Integer seatNumber;
 
     @ManyToOne
     @JoinColumn(name = "hall_id")
@@ -20,7 +20,7 @@ public class Seat {
 
     public Seat() {}
 
-    public Seat(String seatType, int seatNumber) {
+    public Seat(String seatType, Integer seatNumber) {
         this.setSeatType(seatType);
         this.setSeatNumber(seatNumber);
     }
@@ -37,11 +37,11 @@ public class Seat {
         this.seatType = seatType;
     }
 
-    public int getSeatNumber (){
+    public Integer getSeatNumber (){
         return seatNumber;
     }
 
-    public void setSeatNumber (int seatNumber){
+    public void setSeatNumber (Integer seatNumber){
         this.seatNumber = seatNumber;
     }
 

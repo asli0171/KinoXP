@@ -1,6 +1,7 @@
 package dk.kinoxp.kinoxp.model;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "SCREENING")
@@ -10,9 +11,8 @@ public class Screening {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int basePrice;
+    private Integer basePrice;
     private LocalDateTime dateTime;
-    private boolean is3D;
 
     @ManyToOne
     @JoinColumn(name = "film_id")
@@ -21,9 +21,12 @@ public class Screening {
     @ManyToOne
     @JoinColumn(name = "hall_id")
     private Hall hall;
+
+    private boolean is3D;
+
     public Screening() {}
 
-    public Screening(int basePrice, Film film, Hall hall, LocalDateTime dateTime, boolean is3D){
+    public Screening(Integer basePrice, Film film, Hall hall, LocalDateTime dateTime, boolean is3D){
         this.setBasePrice(basePrice);
         this.setFilm(film);
         this.setHall(hall);
@@ -36,12 +39,12 @@ public class Screening {
 
     }
 
-    public int getBasePrice (){
+    public Integer getBasePrice (){
         return basePrice;
 
     }
 
-    public void setBasePrice (int basePrice){
+    public void setBasePrice (Integer basePrice){
         this.basePrice = basePrice;
     }
 
@@ -73,7 +76,7 @@ public class Screening {
         this.dateTime = dateTime;
     }
 
-    public boolean isIs3D() {
+    public boolean is3D() {
         return is3D;
     }
 

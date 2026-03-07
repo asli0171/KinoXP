@@ -14,16 +14,16 @@ public class Film {
 
     private String language;
 
-    private String agerating;
+    private String ageRating;
 
-    private int length;
+    private Integer length;
 
     public Film() {}
 
-    public Film(String title, String language, String agerating, int length ) {
+    public Film(String title, String language, String ageRating, Integer length ) {
         this.setTitle(title);
         this.setLanguage(language);
-        this.setAgerating(agerating);
+        this.setAgeRating(ageRating);
         this.setLength(length);
     }
 
@@ -49,21 +49,21 @@ public class Film {
         this.language = language;
     }
 
-    public String getAgerating (){
-        return agerating;
+    public String getAgeRating(){
+        return ageRating;
     }
 
-    public void setAgerating (String agerating){
-        this.agerating = agerating;
+    public void setAgeRating(String ageRating){
+        this.ageRating = ageRating;
 
     }
 
-    public int getLength (){
+    public Integer getLength (){
         return length;
 
     }
 
-    public void setLength (int length){
+    public void setLength (Integer length){
         this.length = length;
     }
 
