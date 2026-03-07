@@ -18,8 +18,9 @@ public class ScreeningController {
     }
 
     @PostMapping
-    public Screening createScreening(@RequestBody Screening screening){
-        return screeningService.saveScreening(screening);
+    public ResponseEntity<Screening> createScreening(@RequestBody Screening screening) {
+        return ResponseEntity.status(201).body(screeningService.saveScreening(screening));
+
     }
 
     @GetMapping
@@ -35,8 +36,9 @@ public class ScreeningController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteScreeningById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteScreeningById(@PathVariable Long id) {
         screeningService.deleteScreeningById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

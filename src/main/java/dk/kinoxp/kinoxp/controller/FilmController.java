@@ -18,8 +18,8 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film createFilm(@RequestBody Film film){
-        return filmService.saveFilm(film);
+    public ResponseEntity<Film> createFilm(@RequestBody Film film) {
+        return ResponseEntity.status(201).body(filmService.saveFilm(film));
     }
 
     @GetMapping
@@ -35,8 +35,10 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFilmById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFilmById(@PathVariable Long id) {
         filmService.deleteFilmById(id);
+        return ResponseEntity.noContent().build();
+
     }
 
     @PutMapping("/{id}")
