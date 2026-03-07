@@ -28,11 +28,11 @@ Sprint 1 — March 3–7
 
 | Story | Priority | Points | Status |
 | --- | --- | --- | --- |
-| As a customer I want to see a list of current screenings so I know what films are showing and when | MVP | 1 | PENDING |
-| As a customer I want to see available seats for a screening so I can choose where to sit | MVP | 2 | PENDING |
-| As a customer I want to reserve specific seats so I can secure my spot | MVP | 3 | PENDING |
-| As a customer I want to see the total price before confirming so I know what I'm paying | MVP | 2 | PENDING |
-| As a customer I want to receive confirmation of my reservation so I have proof of booking | MVP | 1 | PENDING |
+| As a customer I want to see a list of current screenings so I know what films are showing and when | MVP | 1 | DONE |
+| As a customer I want to see available seats for a screening so I can choose where to sit | MVP | 2 | DONE |
+| As a customer I want to reserve specific seats so I can secure my spot | MVP | 3 | DONE |
+| As a customer I want to see the total price before confirming so I know what I'm paying | MVP | 2 | DONE |
+| As a customer I want to receive confirmation of my reservation so I have proof of booking | MVP | 1 | DONE |
 | As a customer I want group discount applied automatically so I don't have to request it manually | MVP | 2 | PENDING |
 | As an admin I want to log in securely so that former employees cannot access the system | MVP | 2 | PENDING |
 
