@@ -114,6 +114,35 @@
         }
         .delete-btn:hover { background: #6a1818; }
 
+        .expand-btn {
+            background: #6B3A2A;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.7rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            margin-right: 0.3rem;
+        }
+        .expand-btn:hover { background: #4e2a1e; }
+
+        .reservations-row { display: none; }
+        .reservations-row.open { display: table-row; }
+
+        .reservations-inner {
+            background: #faf5f2;
+            padding: 0.5rem 1rem;
+        }
+
+        .reservations-inner table {
+            background: #f5f0ec;
+            font-size: 0.8rem;
+        }
+
+        .reservations-inner th {
+            background: #4e2a1e;
+        }
+
         .add-form {
             background: white;
             padding: 1.5rem;
@@ -176,9 +205,10 @@
 </header>
 
 <div class="tabs">
-    <button class="tab active" onclick="showTab('reservations')">Reservationer</button>
-    <button class="tab" onclick="showTab('films')">Film</button>
-    <button class="tab" onclick="showTab('screenings')">Forestillinger</button>
+    <button class="tab active" onclick="showTab('reservations', event)">Reservationer</button>
+    <button class="tab" onclick="showTab('films', event)">Film</button>
+    <button class="tab" onclick="showTab('screenings', event)">Forestillinger</button>
+    <button class="tab" onclick="showTab('users', event)">Brugere</button>
 </div>
 
 <main>
@@ -266,6 +296,8 @@
                     <option value="1">Sal 1</option>
                     <option value="2">Sal 2</option>
                     <option value="3">Sal 3</option>
+                    <option value="4">Sal 4</option>
+                    <option value="5">Sal 5</option>
                 </select>
             </div>
             <div class="form-group">
@@ -300,7 +332,39 @@
             </tr>
             </thead>
             <tbody id="screenings-body">
-            <tr><td colspan="7" class="loading">Henter...</td></tr>
+            <tr><td colspan="8" class="loading">Henter...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section" id="section-users">
+        <div class="section-header">
+            <h2>Brugere</h2>
+        </div>
+
+        <div class="add-form">
+            <div class="form-group">
+                <label>Brugernavn</label>
+                <input id="user-username" type="text" placeholder="brugernavn">
+            </div>
+            <div class="form-group">
+                <label>Adgangskode</label>
+                <input id="user-password" type="password" placeholder="adgangskode">
+            </div>
+            <button class="add-btn" onclick="addUser()">+ Tilføj Bruger</button>
+        </div>
+        <div id="user-msg"></div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Brugernavn</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="users-body">
+            <tr><td colspan="3" class="loading">Henter...</td></tr>
             </tbody>
         </table>
     </div>
@@ -308,18 +372,7 @@
 </main>
 
 <script>
-    var credentials = btoa('admin:admin123');
-    var authHeader = 'Basic ' + credentials;
-
-    function authFetch(url, options) {
-        options = options || {};
-        options.headers = options.headers || {};
-        options.headers['Authorization'] = authHeader;
-        options.headers['Content-Type'] = 'application/json';
-        return fetch(url, options);
-    }
-
-    function showTab(name) {
+    function showTab(name, event) {
         document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
         document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
         document.getElementById('section-' + name).classList.add('active');
@@ -328,15 +381,16 @@
         if (name === 'reservations') loadReservations();
         if (name === 'films') loadFilms();
         if (name === 'screenings') { loadScreenings(); loadFilmsForSelect(); }
+        if (name === 'users') loadUsers();
     }
 
     function logout() {
-        fetch('/api/admin', { headers: { 'Authorization': 'Basic ' + btoa('logout:logout') } })
-            .finally(function() { window.location.href = '/'; });
+        fetch('/logout', { method: 'POST' })
+            .then(function() { window.location.href = '/'; });
     }
 
     function loadReservations() {
-        authFetch('/api/reservations')
+        fetch('/api/reservations')
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 var body = document.getElementById('reservations-body');
@@ -361,7 +415,7 @@
 
     function deleteReservation(id) {
         if (!confirm('Slet reservation ' + id + '?')) return;
-        authFetch('/api/reservations/' + id, { method: 'DELETE' })
+        fetch('/api/reservations/' + id, { method: 'DELETE' })
             .then(function() { loadReservations(); });
     }
 
@@ -394,8 +448,9 @@
 
         if (!title) { msg.innerHTML = '<p class="error">Titel er påkrævet.</p>'; return; }
 
-        authFetch('/api/films', {
+        fetch('/api/films', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: title, language: lang, ageRating: age, length: parseInt(length) })
         })
             .then(function(r) { return r.json(); })
@@ -412,7 +467,7 @@
 
     function deleteFilm(id) {
         if (!confirm('Slet film ' + id + '?')) return;
-        authFetch('/api/films/' + id, { method: 'DELETE' })
+        fetch('/api/films/' + id, { method: 'DELETE' })
             .then(function() { loadFilms(); });
     }
 
@@ -442,6 +497,7 @@
                     var hall = s.hall ? s.hall.hallNumber : '–';
                     var dt = new Date(s.dateTime);
                     var dtStr = dt.toLocaleDateString('da-DK') + ' ' + dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'});
+
                     var tr = document.createElement('tr');
                     tr.innerHTML =
                         '<td>' + s.id + '</td>' +
@@ -450,9 +506,67 @@
                         '<td>' + dtStr + '</td>' +
                         '<td>' + s.basePrice + ' kr</td>' +
                         '<td>' + (s.is3D ? 'Ja' : 'Nej') + '</td>' +
-                        '<td><button class="delete-btn" onclick="deleteScreening(' + s.id + ')">Slet</button></td>';
+                        '<td>' +
+                        '<button class="expand-btn" onclick="toggleReservations(' + s.id + ', this)">▶ Reservationer</button>' +
+                        '<button class="delete-btn" onclick="deleteScreening(' + s.id + ')">Slet</button>' +
+                        '</td>';
                     body.appendChild(tr);
+
+                    var expandRow = document.createElement('tr');
+                    expandRow.className = 'reservations-row';
+                    expandRow.id = 'res-row-' + s.id;
+                    expandRow.innerHTML = '<td colspan="7"><div class="reservations-inner" id="res-inner-' + s.id + '">Henter...</div></td>';
+                    body.appendChild(expandRow);
                 });
+            });
+    }
+
+    function toggleReservations(screeningId, btn) {
+        var row = document.getElementById('res-row-' + screeningId);
+        var isOpen = row.classList.contains('open');
+
+        if (isOpen) {
+            row.classList.remove('open');
+            btn.textContent = '▶ Reservationer';
+        } else {
+            row.classList.add('open');
+            btn.textContent = '▼ Reservationer';
+            loadReservationsForScreening(screeningId);
+        }
+    }
+
+    function loadReservationsForScreening(screeningId) {
+        var inner = document.getElementById('res-inner-' + screeningId);
+        fetch('/api/reservations/screening/' + screeningId)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.length === 0) {
+                    inner.innerHTML = '<p style="padding:0.5rem;color:#888;font-size:0.8rem;">Ingen reservationer.</p>';
+                    return;
+                }
+
+                var seen = {};
+                var unique = data.filter(function(rs) {
+                    if (seen[rs.reservation.id]) return false;
+                    seen[rs.reservation.id] = true;
+                    return true;
+                });
+
+                var html = '<table><thead><tr><th>Navn</th><th>Email</th><th>Billetter</th><th>Total</th></tr></thead><tbody>';
+                unique.forEach(function(rs) {
+                    var r = rs.reservation;
+                    html += '<tr>' +
+                        '<td>' + (r.customerName || '–') + '</td>' +
+                        '<td>' + (r.customerEmail || '–') + '</td>' +
+                        '<td>' + r.numberOfTickets + '</td>' +
+                        '<td>' + r.totalPrice + ' kr</td>' +
+                        '</tr>';
+                });
+                html += '</tbody></table>';
+                inner.innerHTML = html;
+            })
+            .catch(function() {
+                inner.innerHTML = '<p style="color:red;font-size:0.8rem;">Kunne ikke hente reservationer.</p>';
             });
     }
 
@@ -466,8 +580,9 @@
 
         if (!filmId || !dt || !price) { msg.innerHTML = '<p class="error">Udfyld alle felter.</p>'; return; }
 
-        authFetch('/api/screenings', {
+        fetch('/api/screenings', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 film: { id: parseInt(filmId) },
                 hall: { id: parseInt(hallId) },
@@ -488,8 +603,56 @@
 
     function deleteScreening(id) {
         if (!confirm('Slet forestilling ' + id + '?')) return;
-        authFetch('/api/screenings/' + id, { method: 'DELETE' })
+        fetch('/api/screenings/' + id, { method: 'DELETE' })
             .then(function() { loadScreenings(); });
+    }
+
+    function loadUsers() {
+        fetch('/api/admin')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                var body = document.getElementById('users-body');
+                body.innerHTML = '';
+                data.forEach(function(u) {
+                    var tr = document.createElement('tr');
+                    tr.innerHTML =
+                        '<td>' + u.id + '</td>' +
+                        '<td>' + u.username + '</td>' +
+                        '<td><button class="delete-btn" onclick="deleteUser(' + u.id + ')">Slet</button></td>';
+                    body.appendChild(tr);
+                });
+            });
+    }
+
+    function addUser() {
+        var username = document.getElementById('user-username').value.trim();
+        var password = document.getElementById('user-password').value.trim();
+        var msg = document.getElementById('user-msg');
+
+        if (!username || !password) { msg.innerHTML = '<p class="error">Udfyld alle felter.</p>'; return; }
+
+        fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, password: password })
+        })
+            .then(function(r) {
+                if (!r.ok) throw new Error();
+                return r.json();
+            })
+            .then(function() {
+                msg.innerHTML = '<p class="msg">Bruger tilføjet!</p>';
+                document.getElementById('user-username').value = '';
+                document.getElementById('user-password').value = '';
+                loadUsers();
+            })
+            .catch(function() { msg.innerHTML = '<p class="error">Kunne ikke tilføje bruger.</p>'; });
+    }
+
+    function deleteUser(id) {
+        if (!confirm('Slet bruger ' + id + '?')) return;
+        fetch('/api/admin/' + id, { method: 'DELETE' })
+            .then(function() { loadUsers(); });
     }
 
     loadReservations();

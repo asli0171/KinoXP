@@ -1,9 +1,13 @@
 package dk.kinoxp.kinoxp;
 
+import dk.kinoxp.kinoxp.model.Admin;
 import dk.kinoxp.kinoxp.model.Film;
 import dk.kinoxp.kinoxp.model.Hall;
 import dk.kinoxp.kinoxp.model.Screening;
 import dk.kinoxp.kinoxp.model.Seat;
+import dk.kinoxp.kinoxp.repository.AdminRepository;
+import dk.kinoxp.kinoxp.repository.HallRepository;
+import dk.kinoxp.kinoxp.service.AdminService;
 import dk.kinoxp.kinoxp.service.PricingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +26,7 @@ public class KinoXpApplication {
     }
 
     @Bean
-    public CommandLineRunner testPricing(PricingService pricingService) {
+    public CommandLineRunner testPricing(PricingService pricingService, AdminService adminService, AdminRepository adminRepository, HallRepository hallRepository) {
         return args -> {
             try {
                 Film testFilm = new Film("Test Film", "Danish", "PG", 180);
@@ -36,7 +40,16 @@ public class KinoXpApplication {
             } catch (Exception e) {
                 System.out.println("PricingService error: " + e.getMessage());
             }
+
+            if (adminRepository.findByUsername("admin").isEmpty()) {
+                adminService.saveAdmin(new Admin("admin", "admin123"));
+            }
+
+            if (hallRepository.count() == 0) {
+                for (int i = 1; i <= 5; i++) {
+                    hallRepository.save(new Hall(i));
+                }
+            }
         };
     }
-
 }

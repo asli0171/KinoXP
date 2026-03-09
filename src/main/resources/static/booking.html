@@ -184,6 +184,8 @@
     </div>
 
     <div class="sidebar">
+        <div class="sidebar-field" id="info-film">Film: –</div>
+        <div class="sidebar-field" id="info-time">Tid: –</div>
         <div class="sidebar-field" id="info-hall">Sal: –</div>
         <div class="sidebar-field" id="info-ticket">Billetter: 0</div>
         <button class="sidebar-btn" onclick="addTicket()">Add Ticket</button>
@@ -214,7 +216,6 @@
     const screeningId = params.get('screeningId');
     let allSeats = [];
     let selectedSeats = [];
-    let basePrice = 0;
     let screeningData = null;
 
     if (!screeningId) {
@@ -230,9 +231,14 @@
             .then(data => {
                 screeningData = data.find(x => x.id == screeningId);
                 if (!screeningData) return;
-                basePrice = screeningData.basePrice || 0;
                 const hall = screeningData.hall || {};
-                document.getElementById('info-hall').textContent = 'Sal: ' + (hall.hallNumber || '?');
+                const film = screeningData.film || {};
+                const dt = screeningData.dateTime ? new Date(screeningData.dateTime) : null;
+                const timeStr = dt ? dt.toLocaleDateString('da-DK', {day:'numeric', month:'short'}) + ' ' + dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'}) : '–';
+
+                document.getElementById('info-film').textContent = 'Film: ' + (film.title || '–');
+                document.getElementById('info-time').textContent = 'Tid: ' + timeStr;
+                document.getElementById('info-hall').textContent = 'Sal: ' + (hall.hallNumber || '–');
                 updateSidebar();
             });
     }
@@ -296,7 +302,7 @@
 
                     var el = document.createElement('button');
                     el.className = 'seat ' + seatType + (available ? '' : ' taken');
-                    el.textContent = 'Seat';
+                    el.textContent = seatType === 'sofa' ? 'Sofa' : 'Seat';
                     el.setAttribute('data-id', seat.id);
                     el.setAttribute('data-number', seat.seatNumber);
 
@@ -351,7 +357,31 @@
 
     function updateSidebar() {
         document.getElementById('info-ticket').textContent = 'Billetter: ' + selectedSeats.length;
-        document.getElementById('info-price').textContent = 'Pris: ' + (selectedSeats.length * basePrice) + ' kr';
+
+        if (!screeningData || selectedSeats.length === 0) {
+            document.getElementById('info-price').textContent = 'Pris: 0 kr';
+            return;
+        }
+
+        var basePrice = screeningData.basePrice || 0;
+        var filmLength = screeningData.film ? screeningData.film.length : 0;
+
+        if (filmLength > 170) basePrice += 20;
+        if (screeningData.is3D) basePrice += 30;
+
+        var total = 0;
+        selectedSeats.forEach(function(seat) {
+            var seatPrice = basePrice;
+            var type = (seat.seatType || '').toLowerCase();
+            if (type === 'cowboy') seatPrice -= seatPrice * 0.10;
+            else if (type === 'sofa') seatPrice += seatPrice * 0.10;
+            total += seatPrice;
+        });
+
+        if (selectedSeats.length <= 5) total += 15;
+        if (selectedSeats.length > 5) total -= total * 0.07;
+
+        document.getElementById('info-price').textContent = 'Pris: ' + Math.round(total) + ' kr';
     }
 
     function submitBooking() {
@@ -402,7 +432,7 @@
         document.getElementById('conf-time').textContent = 'Tidspunkt: ' + timeStr;
         document.getElementById('conf-hall').textContent = 'Sal: ' + hall;
         document.getElementById('conf-seats').textContent = 'Antal billetter: ' + selectedSeats.length;
-        document.getElementById('conf-price').textContent = 'Total: ' + (selectedSeats.length * basePrice) + ' kr';
+        document.getElementById('conf-price').textContent = 'Total: ' + reservation.totalPrice + ' kr';
 
         document.getElementById('confirmation').classList.add('show');
     }

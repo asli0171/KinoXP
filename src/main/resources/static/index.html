@@ -68,6 +68,7 @@
             text-align: center;
         }
         .time-btn:hover { background: #4e2a1e; }
+        .time-btn.selected { background: #3a1a0e; }
 
         .book-btn {
             background: #6B3A2A;
@@ -131,6 +132,15 @@
 
                 var selectedScreeningId = screenings[0].id;
 
+                var bookBtn = document.createElement('button');
+                bookBtn.className = 'book-btn';
+                bookBtn.textContent = 'Book';
+                bookBtn.setAttribute('data-screening', selectedScreeningId);
+                bookBtn.addEventListener('click', function() {
+                    var id = bookBtn.getAttribute('data-screening');
+                    window.location.href = '/booking.html?screeningId=' + id;
+                });
+
                 screenings.forEach(function(s) {
                     var dt = new Date(s.dateTime);
                     var date = dt.toLocaleDateString('da-DK', {day:'numeric', month:'short'});
@@ -142,10 +152,10 @@
                     btn.setAttribute('data-id', s.id);
 
                     btn.addEventListener('click', function() {
-                        times.querySelectorAll('.time-btn').forEach(function(b) {
-                            b.style.background = '#6B3A2A';
+                        document.querySelectorAll('.time-btn').forEach(function(b) {
+                            b.classList.remove('selected');
                         });
-                        btn.style.background = '#3a1a0e';
+                        btn.classList.add('selected');
                         selectedScreeningId = s.id;
                         bookBtn.setAttribute('data-screening', s.id);
                     });
@@ -154,15 +164,6 @@
                 });
 
                 card.appendChild(times);
-
-                var bookBtn = document.createElement('button');
-                bookBtn.className = 'book-btn';
-                bookBtn.textContent = 'Book';
-                bookBtn.setAttribute('data-screening', selectedScreeningId);
-                bookBtn.addEventListener('click', function() {
-                    var id = bookBtn.getAttribute('data-screening');
-                    window.location.href = '/booking.html?screeningId=' + id;
-                });
                 card.appendChild(bookBtn);
 
                 grid.appendChild(card);
