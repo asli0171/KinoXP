@@ -35,34 +35,38 @@ public class PricingService {
     private double sofaSurcharge;
 
     public double calculatePrice(Screening screening, int numberOfTickets, List<Seat> seats) {
-        double price = screening.getBasePrice();
+        double basePrice = screening.getBasePrice();
 
         if (screening.getFilm().getLength() > longFilmThreshold) {
-            price += longFilmSurcharge;}
+            basePrice += longFilmSurcharge;
+        }
 
         if (screening.is3D()) {
-            price += surcharge3D;}
+            basePrice += surcharge3D;
+        }
 
+        double total = 0;
         for (Seat seat : seats) {
-            if (seat.getSeatType().equals("cowboy")) {
-                price -= price * cowboySurcharge;
-            } else if (seat.getSeatType().equals("sofa")) {
-                price += sofaSurcharge;}
+            double seatPrice = basePrice;
+            if (seat.getSeatType().equalsIgnoreCase("cowboy")) {
+                seatPrice -= seatPrice * cowboySurcharge;
+            } else if (seat.getSeatType().equalsIgnoreCase("sofa")) {
+                seatPrice += sofaSurcharge;
+            }
+            total += seatPrice;
         }
 
-        if (numberOfTickets < groupThreshold) {
-            price += reservationFee;
+        if (numberOfTickets <= 5) {
+            total += reservationFee;
         }
 
-        if (numberOfTickets >= groupThreshold) {
-            price -= price * groupDiscount;
+        if (numberOfTickets > groupThreshold) {
+            total -= total * groupDiscount;
         }
 
-        return price;
+        return Math.round(total);
     }
 }
-
-
 
 
 

@@ -3,7 +3,7 @@ package dk.kinoxp.kinoxp.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "HALL")
+@Table(name = "hall")
 public class Hall {
 
     @Id

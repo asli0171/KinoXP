@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name = "SCREENING")
+@Table(name = "screening")
 public class Screening {
 
 

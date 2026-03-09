@@ -1,9 +1,10 @@
 package dk.kinoxp.kinoxp.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "RESERVATION")
+@Table(name = "reservation")
 public class Reservation {
 
     @Id
@@ -18,6 +19,9 @@ public class Reservation {
 
     private double totalPrice;
 
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationSeat> reservationSeats;
+
     public Reservation() {}
 
     public Reservation(String customerEmail, String customerName, int numberOfTickets, double totalPrice) {
@@ -31,35 +35,35 @@ public class Reservation {
         return id;
     }
 
-    public String getCustomerEmail (){
+    public String getCustomerEmail() {
         return customerEmail;
     }
 
-    public void setCustomerEmail (String customerEmail){
+    public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
     }
 
-    public String getCustomerName (){
+    public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName (String customerName){
+    public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
 
-    public int getNumberOfTickets (){
+    public int getNumberOfTickets() {
         return numberOfTickets;
     }
 
-    public void setNumberOfTickets (int numberOfTickets){
+    public void setNumberOfTickets(int numberOfTickets) {
         this.numberOfTickets = numberOfTickets;
     }
 
-    public double getTotalPrice (){
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice (double totalPrice){
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

@@ -2,16 +2,15 @@ package dk.kinoxp.kinoxp.controller;
 
 import dk.kinoxp.kinoxp.dto.ReservationRequestDTO;
 import dk.kinoxp.kinoxp.model.Reservation;
+import dk.kinoxp.kinoxp.model.ReservationSeat;
 import dk.kinoxp.kinoxp.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/reservations")
-
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -23,7 +22,6 @@ public class ReservationController {
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
         return ResponseEntity.status(201).body(reservationService.saveReservation(reservation));
     }
-
 
     @GetMapping
     public List<Reservation> getAllReservations() {
@@ -37,6 +35,11 @@ public class ReservationController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/screening/{screeningId}")
+    public List<ReservationSeat> getReservationsByScreening(@PathVariable Long screeningId) {
+        return reservationService.getReservationsByScreeningId(screeningId);
+    }
+
     @PostMapping("/book")
     public Reservation createReservation(@RequestBody ReservationRequestDTO request) {
         return reservationService.createReservation(request.getScreeningId(), request.getSeatId(), request.getCustomerName(), request.getCustomerEmail());
@@ -47,5 +50,4 @@ public class ReservationController {
         reservationService.deleteReservationById(id);
         return ResponseEntity.noContent().build();
     }
-
 }
