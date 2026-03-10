@@ -33,8 +33,8 @@ Sprint 1 — March 3–7
 | As a customer I want to reserve specific seats so I can secure my spot | MVP | 3 | DONE |
 | As a customer I want to see the total price before confirming so I know what I'm paying | MVP | 2 | DONE |
 | As a customer I want to receive confirmation of my reservation so I have proof of booking | MVP | 1 | DONE |
-| As a customer I want group discount applied automatically so I don't have to request it manually | MVP | 2 | PENDING |
-| As an admin I want to log in securely so that former employees cannot access the system | MVP | 2 | PENDING |
+| As a customer I want group discount applied automatically so I don't have to request it manually | MVP | 2 | DONE IN SPRINT 2 |
+| As an admin I want to log in securely so that former employees cannot access the system | MVP | 2 | DONE IN SPRINT 2 |
 
 Sprint 2 — March 8–14
 
