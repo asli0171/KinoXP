@@ -426,16 +426,20 @@
         var dt = screeningData ? new Date(screeningData.dateTime) : null;
         var timeStr = dt ? dt.toLocaleDateString('da-DK', {weekday:'short', day:'numeric', month:'short'}) + ' ' + dt.toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'}) : '–';
 
-        document.getElementById('conf-name').textContent = 'Navn: ' + name;
-        document.getElementById('conf-email').textContent = 'E-mail: ' + email;
-        document.getElementById('conf-film').textContent = 'Film: ' + film;
-        document.getElementById('conf-time').textContent = 'Tidspunkt: ' + timeStr;
-        document.getElementById('conf-hall').textContent = 'Sal: ' + hall;
-        document.getElementById('conf-seats').textContent = 'Antal billetter: ' + selectedSeats.length;
-        document.getElementById('conf-price').textContent = 'Total: ' + reservation.totalPrice + ' kr';
+        var params = new URLSearchParams({
+            id: reservation.id,
+            email: email,
+            name: name,
+            film: film,
+            time: timeStr,
+            hall: 'Sal ' + hall,
+            tickets: selectedSeats.length,
+            price: reservation.totalPrice
+        });
 
-        document.getElementById('confirmation').classList.add('show');
-    }
+        window.location.href = '/confirm.html?' + params.toString();
+    };
+
 </script>
 </body>
 </html>

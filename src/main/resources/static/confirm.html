@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP – Booking Bekræftet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: white; }
+
+        header {
+            background: #6B3A2A;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        main {
+            padding: 3rem 4rem;
+            max-width: 700px;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #111;
+            margin-bottom: 1rem;
+            font-weight: normal;
+        }
+
+        .meta {
+            font-size: 0.95rem;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .ticket-box {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            width: 280px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .ticket-box p { margin-bottom: 0.3rem; }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .home-btn:hover { background: #4e2a1e; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP</h1>
+</header>
+
+<main>
+    <h2>Tak for din booking!</h2>
+    <p class="meta">Ordrenummer: <span id="conf-id">–</span></p>
+    <p class="meta">E-mail: <span id="conf-email">–</span></p>
+
+    <div class="ticket-box">
+        <p><strong>Film:</strong> <span id="conf-film">–</span></p>
+        <p><strong>Tidspunkt:</strong> <span id="conf-time">–</span></p>
+        <p><strong>Sal:</strong> <span id="conf-hall">–</span></p>
+        <p><strong>Navn:</strong> <span id="conf-name">–</span></p>
+        <p><strong>Billetter:</strong> <span id="conf-tickets">–</span></p>
+        <p><strong>Total:</strong> <span id="conf-price">–</span> kr</p>
+    </div>
+
+    <a href="/" class="home-btn">← Tilbage til forsiden</a>
+</main>
+
+<script>
+    var params = new URLSearchParams(window.location.search);
+
+    document.getElementById('conf-id').textContent = params.get('id') || '–';
+    document.getElementById('conf-email').textContent = params.get('email') || '–';
+    document.getElementById('conf-film').textContent = params.get('film') || '–';
+    document.getElementById('conf-time').textContent = params.get('time') || '–';
+    document.getElementById('conf-hall').textContent = params.get('hall') || '–';
+    document.getElementById('conf-name').textContent = params.get('name') || '–';
+    document.getElementById('conf-tickets').textContent = params.get('tickets') || '–';
+    document.getElementById('conf-price').textContent = params.get('price') || '–';
+</script>
+</body>
+</html>
