@@ -152,13 +152,20 @@
                     btn.setAttribute('data-id', s.id);
 
                     btn.addEventListener('click', function() {
-                        document.querySelectorAll('.time-btn').forEach(function(b) {
-                            b.classList.remove('selected');
-                        });
-                        btn.classList.add('selected');
-                        selectedScreeningId = s.id;
-                        bookBtn.setAttribute('data-screening', s.id);
+                        if (btn.classList.contains('selected')) {
+                            btn.classList.remove('selected');
+                            selectedScreeningId = null;
+                            bookBtn.setAttribute('data-screening', '');
+                        } else {
+                            document.querySelectorAll('.time-btn').forEach(function(b) {
+                                b.classList.remove('selected');
+                            });
+                            btn.classList.add('selected');
+                            selectedScreeningId = s.id;
+                            bookBtn.setAttribute('data-screening', s.id);
+                        }
                     });
+
 
                     times.appendChild(btn);
                 });

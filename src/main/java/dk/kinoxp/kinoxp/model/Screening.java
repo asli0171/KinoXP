@@ -1,7 +1,6 @@
 package dk.kinoxp.kinoxp.model;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "screening")
