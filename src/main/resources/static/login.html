@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP – Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f0ec; }
+
+        header {
+            background: #6B3A2A;
+            padding: 2rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        main {
+            display: flex;
+            gap: 2rem;
+            padding: 3rem 4rem;
+            align-items: flex-start;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            width: 260px;
+        }
+
+        .field-label {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            padding: 0.6rem 1rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .login-form input {
+            background: white;
+            border: 1px solid #d4c4b8;
+            padding: 0.7rem 1rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: Arial, sans-serif;
+            width: 100%;
+        }
+        .login-form input:focus {
+            border-color: #6B3A2A;
+        }
+
+        .login-btn {
+            background: #6B3A2A;
+            color: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 3px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        .login-btn:hover { background: #6B3A2A; }
+
+        .cinema-image {
+            flex: 1;
+            background: #6B3A2A;
+            border-radius: 4px;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f5e6d3;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .error-msg {
+            background: #6B3A2A;
+            color: white;
+            padding: 0.6rem 1rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+        }
+        .error-msg.show { display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP</h1>
+</header>
+
+<main>
+    <div class="login-form">
+        <div class="field-label">Brugernavn</div>
+        <input type="text" id="username" placeholder="Indtast brugernavn">
+        <div class="field-label">Adgangskode</div>
+        <input type="password" id="password" placeholder="Indtast adgangskode">
+        <div class="error-msg" id="error-msg">Forkert brugernavn eller adgangskode</div>
+        <button class="login-btn" onclick="doLogin()">Log ind</button>
+    </div>
+
+    <div class="cinema-image">
+        Billede af biograf
+    </div>
+</main>
+
+<script>
+    function doLogin() {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+
+        var formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('password', password);
+
+        fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString()
+        }).then(function(r) {
+            if (r.ok || r.redirected) {
+                window.location.href = '/admin.html';
+            } else {
+                document.getElementById('error-msg').classList.add('show');
+            }
+        }).catch(function() {
+            document.getElementById('error-msg').classList.add('show');
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') doLogin();
+    });
+</script>
+</body>
+</html>

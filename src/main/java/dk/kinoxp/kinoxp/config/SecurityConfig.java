@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .userDetailsService(adminDetailsService)
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/booking.html", "/confirm.html").permitAll()
+                        .requestMatchers("/", "/index.html", "/booking.html", "/login.html").permitAll()
                         .requestMatchers("/**.css", "/**.js").permitAll()
                         .requestMatchers("/api/screenings/**").permitAll()
                         .requestMatchers("/api/seats/**").permitAll()
@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginPage("/login.html")
                         .defaultSuccessUrl("/admin.html", true)
                 )
                 .logout(logout -> logout
