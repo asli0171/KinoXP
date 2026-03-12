@@ -106,47 +106,20 @@
 </header>
 
 <main>
-    <div class="login-form">
+    <form class="login-form" action="/login" method="post">
         <div class="field-label">Brugernavn</div>
-        <input type="text" id="username" placeholder="Indtast brugernavn">
+        <input type="text" name="username" placeholder="Indtast brugernavn">
         <div class="field-label">Adgangskode</div>
-        <input type="password" id="password" placeholder="Indtast adgangskode">
+        <input type="password" name="password" placeholder="Indtast adgangskode">
         <div class="error-msg" id="error-msg">Forkert brugernavn eller adgangskode</div>
-        <button class="login-btn" onclick="doLogin()">Log ind</button>
-    </div>
+        <button class="login-btn" type="submit">Log ind</button>
+    </form>
 
     <div class="cinema-image">
         Billede af biograf
     </div>
 </main>
 
-<script>
-    function doLogin() {
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
 
-        var formData = new URLSearchParams();
-        formData.append('username', username);
-        formData.append('password', password);
-
-        fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData.toString()
-        }).then(function(r) {
-            if (r.ok || r.redirected) {
-                window.location.href = '/admin.html';
-            } else {
-                document.getElementById('error-msg').classList.add('show');
-            }
-        }).catch(function() {
-            document.getElementById('error-msg').classList.add('show');
-        });
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') doLogin();
-    });
-</script>
 </body>
 </html>
