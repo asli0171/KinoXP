@@ -386,7 +386,7 @@
 
     function logout() {
         fetch('/logout', { method: 'POST' })
-            .then(function() { window.location.href = '/'; });
+            .then(function() { window.location.href = '/login.html'; });
     }
 
     function loadReservations() {
