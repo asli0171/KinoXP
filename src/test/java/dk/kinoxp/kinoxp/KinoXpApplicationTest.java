@@ -9,5 +9,4 @@ class KinoXpApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
