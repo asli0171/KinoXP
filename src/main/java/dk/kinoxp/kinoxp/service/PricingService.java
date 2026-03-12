@@ -10,29 +10,34 @@ import java.util.List;
 @Service
 public class PricingService {
 
-    @Value("${pricing.longfilm.surcharge}")
     private int longFilmSurcharge;
 
-    @Value("${pricing.3d.surcharge}")
     private int surcharge3D;
 
-    @Value("${pricing.reservation.fee}")
     private int reservationFee;
 
-    @Value("${pricing.group.discount}")
     private double groupDiscount;
 
-    @Value("${pricing.longfilm.threshold}")
     private int longFilmThreshold;
 
-    @Value("${pricing.group.threshold}")
     private int groupThreshold;
 
-    @Value("${pricing.seat.cowboy}")
     private double cowboySurcharge;
 
-    @Value("${pricing.seat.sofa}")
     private double sofaSurcharge;
+
+    public PricingService(@Value("${pricing.longfilm.surcharge}") int longFilmSurcharge, @Value("${pricing.3d.surcharge}") int surcharge3D, @Value("${pricing.reservation.fee}") int reservationFee, @Value("${pricing.group.discount}") double groupDiscount, @Value("${pricing.longfilm.threshold}") int longFilmThreshold, @Value("${pricing.group.threshold}") int groupThreshold, @Value("${pricing.seat.cowboy}") double cowboySurcharge, @Value("${pricing.seat.sofa}") double sofaSurcharge) {
+        this.longFilmSurcharge = longFilmSurcharge;
+        this.surcharge3D = surcharge3D;
+        this.reservationFee = reservationFee;
+        this.groupDiscount = groupDiscount;
+        this.longFilmThreshold = longFilmThreshold;
+        this.groupThreshold = groupThreshold;
+        this.cowboySurcharge = cowboySurcharge;
+        this.sofaSurcharge = sofaSurcharge;
+
+    }
+
 
     public double calculatePrice(Screening screening, int numberOfTickets, List<Seat> seats) {
         double basePrice = screening.getBasePrice();
