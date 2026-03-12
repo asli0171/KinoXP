@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .userDetailsService(adminDetailsService)
-                .csrf(csrf -> csrf.disable())
+                .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/booking.html", "/login.html", "/confirm.html").permitAll()
                         .requestMatchers("/**.css", "/**.js").permitAll()
