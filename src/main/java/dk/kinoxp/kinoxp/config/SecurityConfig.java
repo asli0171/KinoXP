@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginProcessingUrl("/login")
                         .loginPage("/login.html")
                         .defaultSuccessUrl("/admin.html", true)
                 )
