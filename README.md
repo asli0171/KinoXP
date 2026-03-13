@@ -96,14 +96,13 @@ Sprint 2 — March 8–14
 
 Nice To Have
 
-| Story | Priority | Points | Status |
-| --- | --- | --- | --- |
-| As a customer I want to log in so I can see my existing reservations | Nice To Have |  | PENDING |
-| As an admin I want to manage seat pricing per hall so I can update prices without changing code | Nice To Have |  | PENDING |
-| As an admin I want to add a 3D surcharge to a screening so the price reflects the equipment used | Nice To Have |  | PENDING |
-| As an admin I want to block broken seats from being reserved so customers cannot book unavailable seats | Nice To Have |  | PENDING |
+| Story | Priority | Points | Status     |
+| --- | --- | --- |------------|
+| As a customer I want to log in so I can see my existing reservations | Nice To Have |  | CUT        |
+| As an admin I want to manage seat pricing per hall so I can update prices without changing code | Nice To Have |  | CUT        |
+| As an admin I want to add a 3D surcharge to a screening so the price reflects the equipment used | Nice To Have |  | DONE       |
+| As an admin I want to block broken seats from being reserved so customers cannot book unavailable seats | Nice To Have |  | WORKAROUND |
 
 <img width="1485" height="905" alt="burndown" src="https://github.com/user-attachments/assets/88ad1e5a-ade8-4302-8f9c-6f7d7850e753" />
 
 
-# CI test
