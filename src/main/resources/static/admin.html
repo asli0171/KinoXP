@@ -508,6 +508,7 @@
                         '<td>' + (s.is3D ? 'Ja' : 'Nej') + '</td>' +
                         '<td>' +
                         '<button class="expand-btn" onclick="toggleReservations(' + s.id + ', this)">▶ Reservationer</button>' +
+                        '<button class="expand-btn" onclick="editScreening(' + s.id + ', ' + s.film.id + ', ' + s.hall.hallNumber + ', \'' + s.dateTime + '\', ' + s.basePrice + ', ' + s.is3D + ')">Rediger</button>' +
                         '<button class="delete-btn" onclick="deleteScreening(' + s.id + ')">Slet</button>' +
                         '</td>';
                     body.appendChild(tr);
@@ -580,8 +581,11 @@
 
         if (!filmId || !dt || !price) { msg.innerHTML = '<p class="error">Udfyld alle felter.</p>'; return; }
 
-        fetch('/api/screenings', {
-            method: 'POST',
+        var method = editingScreeningId ? 'PUT' : 'POST';
+        var url = editingScreeningId ? '/api/screenings/' + editingScreeningId : '/api/screenings';
+
+        fetch(url, {
+            method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 film: { id: parseInt(filmId) },
@@ -593,7 +597,9 @@
         })
             .then(function(r) { return r.json(); })
             .then(function() {
-                msg.innerHTML = '<p class="msg">Forestilling tilføjet!</p>';
+                msg.innerHTML = '<p class="msg">' + (editingScreeningId ? 'Forestilling opdateret!' : 'Forestilling tilføjet!') + '</p>';
+                editingScreeningId = null;
+                document.querySelector('[onclick="addScreening()"]').textContent = '+ Tilføj';
                 document.getElementById('screening-datetime').value = '';
                 document.getElementById('screening-price').value = '';
                 loadScreenings();
@@ -605,6 +611,18 @@
         if (!confirm('Slet forestilling ' + id + '?')) return;
         fetch('/api/screenings/' + id, { method: 'DELETE' })
             .then(function() { loadScreenings(); });
+    }
+
+    var editingScreeningId = null;
+
+    function editScreening(id, filmId, hallNumber, dateTime, basePrice, is3D) {
+        editingScreeningId = id;
+        document.getElementById('screening-film').value = filmId;
+        document.getElementById('screening-hall').value = hallNumber;
+        document.getElementById('screening-datetime').value = dateTime.slice(0, 16);
+        document.getElementById('screening-price').value = basePrice;
+        document.getElementById('screening-3d').value = is3D ? 'true' : 'false';
+        document.querySelector('[onclick="addScreening()"]').textContent = 'Gem ændringer';
     }
 
     function loadUsers() {

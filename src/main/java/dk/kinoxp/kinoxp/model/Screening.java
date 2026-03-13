@@ -1,5 +1,7 @@
 package dk.kinoxp.kinoxp.model;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +23,7 @@ public class Screening {
     @JoinColumn(name = "hall_id")
     private Hall hall;
 
+    @JsonProperty("is3D")
     private boolean is3D;
 
     public Screening() {}
