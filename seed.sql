@@ -1,0 +1,68 @@
+USE kinoxp;
+
+INSERT INTO hall (hallnumber) VALUES (1),(2),(3),(4),(5);
+
+INSERT INTO film (title, language, age_rating, length) VALUES
+                                                           ('Inception','English','PG13',148),
+                                                           ('The Dark Knight','English','PG13',152),
+                                                           ('Interstellar','English','PG13',169),
+                                                           ('Parasite','Korean','R',132),
+                                                           ('Gone Girl','English','R',149),
+                                                           ('Bee Movie','English','PG',95),
+                                                           ('Sinners','English','R',137),
+                                                           ('The Lion King','English','PG',118);
+
+INSERT INTO seat (seat_number, seat_type, hall_id) VALUES
+                                                       (1,'Cowboy',1),(2,'Cowboy',1),(3,'Cowboy',1),(4,'Cowboy',1),(5,'Cowboy',1),
+                                                       (6,'Cowboy',1),(7,'Cowboy',1),(8,'Cowboy',1),(9,'Cowboy',1),(10,'Cowboy',1),
+                                                       (11,'Standard',1),(12,'Standard',1),(13,'Standard',1),(14,'Standard',1),(15,'Standard',1),
+                                                       (16,'Standard',1),(17,'Standard',1),(18,'Standard',1),(19,'Standard',1),(20,'Standard',1),
+                                                       (21,'Standard',1),(22,'Standard',1),(23,'Standard',1),(24,'Standard',1),(25,'Standard',1),
+                                                       (26,'Standard',1),(27,'Standard',1),(28,'Standard',1),(29,'Standard',1),(30,'Standard',1),
+                                                       (31,'Sofa',1),(32,'Sofa',1),(33,'Sofa',1),(34,'Sofa',1),
+                                                       (1,'Cowboy',2),(2,'Cowboy',2),(3,'Cowboy',2),(4,'Cowboy',2),(5,'Cowboy',2),
+                                                       (6,'Cowboy',2),(7,'Cowboy',2),(8,'Cowboy',2),(9,'Cowboy',2),(10,'Cowboy',2),
+                                                       (11,'Standard',2),(12,'Standard',2),(13,'Standard',2),(14,'Standard',2),(15,'Standard',2),
+                                                       (16,'Standard',2),(17,'Standard',2),(18,'Standard',2),(19,'Standard',2),(20,'Standard',2),
+                                                       (21,'Standard',2),(22,'Standard',2),(23,'Standard',2),(24,'Standard',2),(25,'Standard',2),
+                                                       (26,'Standard',2),(27,'Standard',2),(28,'Standard',2),(29,'Standard',2),(30,'Standard',2),
+                                                       (31,'Sofa',2),(32,'Sofa',2),(33,'Sofa',2),(34,'Sofa',2),
+                                                       (1,'Cowboy',3),(2,'Cowboy',3),(3,'Cowboy',3),(4,'Cowboy',3),(5,'Cowboy',3),
+                                                       (6,'Cowboy',3),(7,'Cowboy',3),(8,'Cowboy',3),(9,'Cowboy',3),(10,'Cowboy',3),
+                                                       (11,'Standard',3),(12,'Standard',3),(13,'Standard',3),(14,'Standard',3),(15,'Standard',3),
+                                                       (16,'Standard',3),(17,'Standard',3),(18,'Standard',3),(19,'Standard',3),(20,'Standard',3),
+                                                       (21,'Standard',3),(22,'Standard',3),(23,'Standard',3),(24,'Standard',3),(25,'Standard',3),
+                                                       (26,'Standard',3),(27,'Standard',3),(28,'Standard',3),(29,'Standard',3),(30,'Standard',3),
+                                                       (31,'Sofa',3),(32,'Sofa',3),(33,'Sofa',3),(34,'Sofa',3),
+                                                       (1,'Cowboy',4),(2,'Cowboy',4),(3,'Cowboy',4),(4,'Cowboy',4),(5,'Cowboy',4),
+                                                       (6,'Cowboy',4),(7,'Cowboy',4),(8,'Cowboy',4),(9,'Cowboy',4),(10,'Cowboy',4),
+                                                       (11,'Standard',4),(12,'Standard',4),(13,'Standard',4),(14,'Standard',4),(15,'Standard',4),
+                                                       (16,'Standard',4),(17,'Standard',4),(18,'Standard',4),(19,'Standard',4),(20,'Standard',4),
+                                                       (21,'Standard',4),(22,'Standard',4),(23,'Standard',4),(24,'Standard',4),(25,'Standard',4),
+                                                       (26,'Standard',4),(27,'Standard',4),(28,'Standard',4),(29,'Standard',4),(30,'Standard',4),
+                                                       (31,'Sofa',4),(32,'Sofa',4),(33,'Sofa',4),(34,'Sofa',4),
+                                                       (1,'Cowboy',5),(2,'Cowboy',5),(3,'Cowboy',5),(4,'Cowboy',5),(5,'Cowboy',5),
+                                                       (6,'Cowboy',5),(7,'Cowboy',5),(8,'Cowboy',5),(9,'Cowboy',5),(10,'Cowboy',5),
+                                                       (11,'Standard',5),(12,'Standard',5),(13,'Standard',5),(14,'Standard',5),(15,'Standard',5),
+                                                       (16,'Standard',5),(17,'Standard',5),(18,'Standard',5),(19,'Standard',5),(20,'Standard',5),
+                                                       (21,'Standard',5),(22,'Standard',5),(23,'Standard',5),(24,'Standard',5),(25,'Standard',5),
+                                                       (26,'Standard',5),(27,'Standard',5),(28,'Standard',5),(29,'Standard',5),(30,'Standard',5),
+                                                       (31,'Sofa',5),(32,'Sofa',5),(33,'Sofa',5),(34,'Sofa',5);
+
+INSERT INTO screening (base_price, date_time, is3d, film_id, hall_id) VALUES
+                                                                          (100,'2026-03-10 19:00:00',0,1,1),
+                                                                          (100,'2026-03-11 21:00:00',0,1,1),
+                                                                          (100,'2026-03-12 17:00:00',0,2,2),
+                                                                          (100,'2026-03-12 20:30:00',0,2,2),
+                                                                          (120,'2026-03-13 18:00:00',1,3,3),
+                                                                          (120,'2026-03-14 20:00:00',1,3,3),
+                                                                          (90,'2026-03-13 16:00:00',0,4,4),
+                                                                          (90,'2026-03-15 19:30:00',0,4,4),
+                                                                          (100,'2026-03-12 19:00:00',0,5,5),
+                                                                          (100,'2026-03-13 21:00:00',0,5,5),
+                                                                          (80,'2026-03-14 15:00:00',0,6,1),
+                                                                          (80,'2026-03-15 17:30:00',0,6,1),
+                                                                          (110,'2026-03-12 20:00:00',0,7,2),
+                                                                          (110,'2026-03-14 22:00:00',0,7,2),
+                                                                          (90,'2026-03-13 14:00:00',0,8,3),
+                                                                          (90,'2026-03-15 16:00:00',0,8,3);
