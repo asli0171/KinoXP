@@ -4,21 +4,25 @@ import dk.kinoxp.kinoxp.model.Admin;
 import dk.kinoxp.kinoxp.service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-
 public class AdminController {
-    private final AdminService adminService;
 
-    public AdminController (AdminService adminService){
+    private final AdminService adminService;
+    private final PasswordEncoder passwordEncoder;
+
+    public AdminController(AdminService adminService, PasswordEncoder passwordEncoder) {
         this.adminService = adminService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
     public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         return ResponseEntity.status(201).body(adminService.saveAdmin(admin));
     }
 

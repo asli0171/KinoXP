@@ -10,6 +10,12 @@ services:
     volumes:
       - kinoxp-data:/var/lib/mysql
 
+  pricing:
+    build: ../pricing-service
+    container_name: kinoxp-pricing
+    ports:
+      - "8081:8081"
+
   app:
     build: .
     container_name: kinoxp-app
@@ -20,8 +26,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      PRICING_SERVICE_URL: http://pricing:8081
     depends_on:
       - db
+      - pricing
 
 volumes:
   kinoxp-data:

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>KinoXP – Mine Bookinger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: white; }
+
+        header {
+            background: #6B3A2A;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #f5e6d3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        #auth-bar {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        main {
+            padding: 3rem 4rem;
+            max-width: 700px;
+        }
+
+        h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #111;
+            margin-bottom: 1.5rem;
+            font-weight: normal;
+        }
+
+        .ticket-box {
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            width: 280px;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .ticket-box p { margin-bottom: 0.3rem; }
+
+        .empty-msg {
+            color: #888;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        .loading { color: #888; font-size: 0.95rem; }
+
+        .home-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            background: #6B3A2A;
+            color: #f5e6d3;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .home-btn:hover { background: #4e2a1e; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>KinoXP</h1>
+    <div id="auth-bar">
+        <a id="auth-link" href="/login.html" style="color:#f5e6d3; text-decoration:none; background:#4e2a1e; padding:0.4rem 0.9rem; border-radius:3px;">Log ind</a>
+    </div>
+</header>
+
+<main>
+    <h2>Mine bookinger</h2>
+    <div id="bookings-container"><p class="loading">Henter bookinger...</p></div>
+    <a href="/" class="home-btn">← Tilbage til forsiden</a>
+</main>
+
+<script>
+    fetch('/api/customers/me')
+        .then(function(r) {
+            if (!r.ok) {
+                window.location.href = '/login.html';
+                return;
+            }
+            return r.json();
+        })
+        .then(function(customer) {
+            if (!customer) return;
+
+            var link = document.getElementById('auth-link');
+            link.textContent = 'Log ud (' + customer.username + ')';
+            link.href = '/logout';
+            link.onclick = function(e) {
+                e.preventDefault();
+                fetch('/logout', { method: 'POST' })
+                    .then(function() { window.location.href = '/login.html'; });
+            };
+
+            return fetch('/api/reservations');
+        })
+        .then(function(r) {
+            if (!r || !r.ok) return;
+            return r.json();
+        })
+        .then(function(reservations) {
+            if (!reservations) return;
+            var container = document.getElementById('bookings-container');
+
+            if (reservations.length === 0) {
+                container.innerHTML = '<p class="empty-msg">Du har ingen bookinger endnu.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            reservations.forEach(function(res) {
+                var box = document.createElement('div');
+                box.className = 'ticket-box';
+                box.innerHTML =
+                    '<p><strong>Ordrenummer:</strong> ' + res.id + '</p>' +
+                    '<p><strong>Navn:</strong> ' + (res.customerName || '–') + '</p>' +
+                    '<p><strong>E-mail:</strong> ' + (res.customerEmail || '–') + '</p>' +
+                    '<p><strong>Billetter:</strong> ' + res.numberOfTickets + '</p>' +
+                    '<p><strong>Total:</strong> ' + res.totalPrice + ' kr</p>';
+                container.appendChild(box);
+            });
+        })
+        .catch(function() {
+            window.location.href = '/login.html';
+        });
+</script>
+</body>
+</html>

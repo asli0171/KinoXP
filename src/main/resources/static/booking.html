@@ -12,6 +12,7 @@
             background: #6B3A2A;
             padding: 2rem;
             text-align: center;
+            position: relative
         }
         header h1 {
             font-family: 'Cormorant Garamond', serif;
@@ -175,6 +176,9 @@
 
 <header>
     <h1>KinoXP</h1>
+    <div id="auth-bar" style="position:absolute; top:1rem; right:1.5rem; font-size:0.85rem;">
+        <a id="auth-link" href="/login.html" style="color:#f5e6d3; text-decoration:none; background:#4e2a1e; padding:0.4rem 0.9rem; border-radius:3px;">Log ind</a>
+    </div>
 </header>
 
 <main>
@@ -391,6 +395,20 @@
         if (!name) return alert('Indtast dit navn.');
         if (!email) return alert('Indtast din e-mail.');
 
+        fetch('/api/customers/me')
+            .then(function(r) {
+                if (r.status === 401 || r.status === 403 || !r.ok) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                doBooking(name, email);
+            })
+            .catch(function() {
+                window.location.href = '/login.html';
+            });
+    }
+
+    function doBooking(name, email) {
         var seatIds = selectedSeats.map(function(s) { return s.id; });
         var btn = document.getElementById('btn-book');
         btn.disabled = true;
@@ -439,6 +457,23 @@
 
         window.location.href = '/confirm.html?' + params.toString();
     };
+
+    fetch('/api/customers/me')
+        .then(function(r) {
+            if (r.ok) return r.json();
+            throw new Error();
+        })
+        .then(function(customer) {
+            var link = document.getElementById('auth-link');
+            link.textContent = 'Log ud (' + customer.username + ')';
+            link.href = '/logout';
+            link.onclick = function(e) {
+                e.preventDefault();
+                fetch('/logout', { method: 'POST' })
+                    .then(function() { window.location.href = '/login.html'; });
+            };
+        })
+        .catch(function() {});
 
 </script>
 </body>

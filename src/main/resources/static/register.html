@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>KinoXP – Login</title>
+    <title>KinoXP – Opret konto</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +30,7 @@
             margin: 0 auto;
         }
 
-        .login-form {
+        .register-form {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
@@ -46,7 +46,7 @@
             text-align: center;
         }
 
-        .login-form input {
+        .register-form input {
             background: white;
             border: 1px solid #d4c4b8;
             padding: 0.7rem 1rem;
@@ -56,11 +56,9 @@
             font-family: Arial, sans-serif;
             width: 100%;
         }
-        .login-form input:focus {
-            border-color: #6B3A2A;
-        }
+        .register-form input:focus { border-color: #6B3A2A; }
 
-        .login-btn {
+        .register-btn {
             background: #6B3A2A;
             color: white;
             border: none;
@@ -71,7 +69,17 @@
             width: 100%;
             margin-top: 0.5rem;
         }
-        .login-btn:hover { background: #6B3A2A; }
+        .register-btn:hover { background: #4e2a1e; }
+
+        .msg {
+            padding: 0.6rem 1rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+        }
+        .msg.error { background: #c0392b; color: white; display: block; }
+        .msg.success { background: #27ae60; color: white; display: block; }
 
         .cinema-image {
             flex: 1;
@@ -86,17 +94,6 @@
             font-size: 1.2rem;
             letter-spacing: 0.05em;
         }
-
-        .error-msg {
-            background: #6B3A2A;
-            color: white;
-            padding: 0.6rem 1rem;
-            border-radius: 3px;
-            font-size: 0.85rem;
-            text-align: center;
-            display: none;
-        }
-        .error-msg.show { display: block; }
     </style>
 </head>
 <body>
@@ -106,21 +103,52 @@
 </header>
 
 <main>
-    <form class="login-form" action="/login" method="post">
+    <div class="register-form">
         <div class="field-label">Brugernavn</div>
-        <input type="text" name="username" placeholder="Indtast brugernavn">
+        <input type="text" id="username" placeholder="Vælg brugernavn">
         <div class="field-label">Adgangskode</div>
-        <input type="password" name="password" placeholder="Indtast adgangskode">
-        <div class="error-msg" id="error-msg">Forkert brugernavn eller adgangskode</div>
-        <button class="login-btn" type="submit">Log ind</button>
-        <a href="/register.html" style="display:block; text-align:center; margin-top:0.5rem; color:#6B3A2A; font-size:0.85rem;">Opret kundekonto</a>
-    </form>
+        <input type="password" id="password" placeholder="Vælg adgangskode">
+        <div class="msg" id="msg"></div>
+        <button class="register-btn" onclick="register()">Opret konto</button>
+        <a href="/login.html" style="display:block; text-align:center; margin-top:0.5rem; color:#6B3A2A; font-size:0.85rem;">Har du allerede en konto? Log ind</a>
+    </div>
 
     <div class="cinema-image">
         Billede af biograf
     </div>
 </main>
 
+<script>
+    function register() {
+        var username = document.getElementById('username').value.trim();
+        var password = document.getElementById('password').value.trim();
+        var msg = document.getElementById('msg');
+
+        if (!username || !password) {
+            msg.textContent = 'Udfyld alle felter.';
+            msg.className = 'msg error';
+            return;
+        }
+
+        fetch('/api/customers/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, password: password })
+        })
+            .then(function(r) {
+                if (!r.ok) return r.text().then(function(t) { throw new Error(t); });
+                msg.textContent = 'Konto oprettet! Du sendes til login...';
+                msg.className = 'msg success';
+                setTimeout(function() {
+                    window.location.href = '/login.html';
+                }, 1500);
+            })
+            .catch(function(err) {
+                msg.textContent = err.message || 'Noget gik galt.';
+                msg.className = 'msg error';
+            });
+    }
+</script>
 
 </body>
 </html>
