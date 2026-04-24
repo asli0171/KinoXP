@@ -18,6 +18,8 @@ Projektet følger en klassisk lagdelt arkitektur med mikroserviceudvidelse:
 - Sikret med JWT (JSON Web Tokens)
 - Kører på port 8081
 
+pricing-service koden findes i mappen `pricing-service/` i samme repository.
+
 # Sikkerhed
 
 
@@ -44,8 +46,6 @@ Opret en .env fil i projektets rodmappe med dine egne værdier for:
 MYSQL_ROOT_PASSWORD
 
 MYSQL_DATABASE
-
-SPRING_DATASOURCE_URL
 
 SPRING_DATASOURCE_USERNAME
 
@@ -97,7 +97,7 @@ Testene bruger Mockito til unit tests og H2 in-memory database til integrationst
 
 # ER Diagram
 
-Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 entiteter — Cinema, Hall, Film, Screening, Seat, ReservationSeat, Reservation og Admin — med deres attributter og relationer. Dette viser den fulde dataarkitektur inklusive sædekategorier, reservationslogik og rollebaseret adgangsseparation mellem admin og kunde.
+Et Chen-notation ER diagram der kortlægger KinoXP domænet. Diagrammet viser 8 entiteter — Cinema, Hall, Film, Screening, Seat, ReservationSeat, Reservation og Admin — med deres attributter og relationer. Dette viser den fulde dataarkitektur inklusive sædekategorier, reservationslogik og rollebaseret adgangsseparation mellem admin og kunde. Customer-entiteten blev tilføjet i Sprint 3 som del af sikkerhedsudvidelsen og fremgår ikke af det originale diagram.
 
 <img width="1024" height="768" alt="KinoXPER (2)" src="https://github.com/user-attachments/assets/87fea7b2-2a55-438a-9c65-c4a96dd26578" />
 
